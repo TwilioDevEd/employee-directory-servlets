@@ -1,5 +1,10 @@
 package com.twilio.employeedirectory.application.servlet;
 
+import com.twilio.employeedirectory.domain.repository.EmployeeRepository;
+import com.twilio.sdk.verbs.Message;
+import com.twilio.sdk.verbs.TwiMLException;
+import com.twilio.sdk.verbs.TwiMLResponse;
+
 import javax.inject.Singleton;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -8,6 +13,20 @@ import java.io.IOException;
 
 @Singleton
 public class EmployeeLookupServlet extends HttpServlet {
+
+  public EmployeeLookupServlet(EmployeeRepository employeeRepository) {
+
+  }
+
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    TwiMLResponse twiMLResponse = new TwiMLResponse();
+    try {
+      twiMLResponse.append(new Message("No Employee Found"));
+      response.getWriter().print(twiMLResponse.toEscapedXML());
+    } catch (TwiMLException e) {
+      throw new RuntimeException(e);
+    }
+  }
 
   @Override
   protected void doPost(HttpServletRequest servletRequest, HttpServletResponse servletResponse)

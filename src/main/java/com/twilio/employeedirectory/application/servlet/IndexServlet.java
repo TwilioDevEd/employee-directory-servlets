@@ -41,6 +41,10 @@ public class IndexServlet extends HttpServlet {
     this.employeeService = employeeService;
   }
 
+  public IndexServlet(EmployeeRepository employeeRepository) {
+
+  }
+
   @Override
   public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
       IOException {
