@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.Arrays;
 import java.util.List;
@@ -73,10 +74,11 @@ public class EmployeeRepository {
      * @param fullNameQuery Query of the fullname
      */
     public List<Employee> findEmployeeByFullName(String fullNameQuery) {
-        /*CriteriaQuery<Employee> cq = criteriaBuilder.createQuery(Employee.class);
+        CriteriaQuery<Employee> cq = criteriaBuilder.createQuery(Employee.class);
         Root<Employee> employeeRoot = cq.from(Employee.class);
-        CriteriaQuery<Employee> likeCriteriaQuery = cq.where(criteriaBuilder.like(employeeRoot.get("fullName"), String.format("*%s*", fullName)));
-        return entityManager.createQuery(likeCriteriaQuery).getResultList();*/
-        return getAll().stream().filter(e->e.getFullName().contains(fullNameQuery)).collect(Collectors.toList());
+        String likeSyntax = String.format("%%%s%%", fullNameQuery);
+        Predicate likeFullName = criteriaBuilder.like(employeeRoot.get("fullName"), likeSyntax);
+        CriteriaQuery<Employee> likeCriteriaQuery = cq.where(likeFullName);
+        return entityManager.createQuery(likeCriteriaQuery).getResultList();
     }
 }
