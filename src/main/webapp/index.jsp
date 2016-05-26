@@ -8,7 +8,9 @@
     <title>Employee Directory App</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha256-k2/8zcNbxVIh5mnQ52A0r3a6jAgMGxFJFE2707UxGCk= sha512-ZV9KawG2Legkwp3nAlxLIVFudTauWuBpC10uEafMHYL0Sarrz5A7G79kXh5+5+woxQ5HM559XX2UZjMJ36Wplg==" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/site.css">
+    <link rel="stylesheet" href="css/main.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="scripts/main.js"></script>
 </head>
 <body>
 <div class="container">
@@ -23,7 +25,7 @@
     </c:if>
     <div>
         <form method="post">
-            <input type="text" name="query" placeholder="query some superheroe" value="<c:out value="${query}"/>"/>
+            <input type="text" id="query" name="query" placeholder="query some superheroe" value="<c:out value="${query}"/>"/>
             <input type="hidden" name="from" value="+15555555555" />
             <input type="submit" name="submit" value="Send"/>
             <c:if test="${employeeMatch.present}">

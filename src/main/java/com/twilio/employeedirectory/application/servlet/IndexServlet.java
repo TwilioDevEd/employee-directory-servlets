@@ -60,7 +60,7 @@ public class IndexServlet extends HttpServlet {
       IOException {
     Optional<String> fullNameQuery = Optional.of(req.getParameter("query"));
     req.setAttribute("firstEmployee", Optional.empty());
-    if (fullNameQuery.isPresent()) {
+    if (fullNameQuery.isPresent() && !fullNameQuery.get().trim().isEmpty()) {
       req.setAttribute("employeeMatch",
           Optional.of(employeeService.queryEmployee(fullNameQuery.get())));
     } else {

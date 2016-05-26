@@ -19,7 +19,7 @@ public class MultiplePartialMatch implements EmployeeMatch {
     @Override
     public String getMessage() {
         StringBuilder builder = new StringBuilder();
-        IntStream.range(1, foundEmployees.size()).boxed().forEach(i -> builder.append(String.format("%d %s", i, foundEmployees.get(i))));
+        IntStream.range(1, foundEmployees.size()).boxed().forEach(i -> builder.append(String.format("%d %s\n", i, foundEmployees.get(i))));
         return builder.toString();
     }
 

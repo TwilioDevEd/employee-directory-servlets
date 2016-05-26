@@ -18,6 +18,7 @@ public class PerfectMatch implements EmployeeMatch {
   public String getMessage() {
     return String.format("%s\n%s\n%s", foundEmployee.getFullName(), foundEmployee.getPhoneNumber(),
         foundEmployee.getEmail());
+
   }
 
   public Employee getFoundEmployee() {

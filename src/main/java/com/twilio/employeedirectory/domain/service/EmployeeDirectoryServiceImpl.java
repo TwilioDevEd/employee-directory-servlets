@@ -17,8 +17,6 @@ public class EmployeeDirectoryServiceImpl implements EmployeeDirectoryService {
 
   private static final Logger LOG = Logger.getLogger(EmployeeDirectoryServiceImpl.class.getName());
 
-  private static final String JSON_PATH = "seed-data.json";
-
   private EmployeeRepository repository;
 
   @Inject
