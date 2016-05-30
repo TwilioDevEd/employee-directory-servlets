@@ -16,14 +16,14 @@ public interface EmployeeMatch {
     public String getMessage();
 
     /**
-     * Gets the message in Twiml format
-     * @return {@link String} not <code>null</code>
+     * Gets the message in Twiml Response object
+     * @return {@link TwiMLResponse} not <code>null</code>
      */
-    public default String getMessageTwiml() throws TwiMLException
+    public default TwiMLResponse getTwiMLResponse() throws TwiMLException
     {
         TwiMLResponse twiMLResponse = new TwiMLResponse();
         twiMLResponse.append(new Message(getMessage()));
-        return twiMLResponse.toEscapedXML();
+        return twiMLResponse;
     }
 
     /**

@@ -34,7 +34,7 @@ public class EmployeeLookupServlet extends HttpServlet {
         }
         try {
             response.setContentType("text/xml");
-            response.getWriter().print(matchResponse.getMessageTwiml());
+            response.getWriter().print(matchResponse.getTwiMLResponse().toEscapedXML());
         } catch (TwiMLException e) {
             throw new RuntimeException(e);
         }
