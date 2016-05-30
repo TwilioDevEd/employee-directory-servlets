@@ -46,6 +46,11 @@ Use Twilio to accept SMS messages and translate them into queries against a SQL 
    mvn compile && mvn jetty:run
    ```
 
+
+# Running the app
+
+If you want to test your Twilio Number outside the US is recommended to use [Text+](http://www.textplus.com/)
+
 1. Each time the applications loads, a servlet listener called `EmployeesSeeder` shall create a new SQLite database in the `App_Data` folder named `Employees.sqlite` seeded with data from the `seed-data.json` file. (Data provided by Marvel. &copy; 2016 MARVEL)
 
 1. Check it out at [http://localhost:8080](http://localhost:8080)

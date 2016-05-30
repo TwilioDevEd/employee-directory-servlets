@@ -2,6 +2,7 @@ package com.twilio.employeedirectory.application.servlet;
 
 
 import com.google.inject.persist.Transactional;
+import com.twilio.employeedirectory.domain.common.Twilio;
 import com.twilio.employeedirectory.domain.error.EmployeeLoadException;
 import com.twilio.employeedirectory.domain.model.Employee;
 import com.twilio.employeedirectory.domain.repository.EmployeeRepository;
@@ -50,7 +51,7 @@ public class IndexServlet extends HttpServlet {
       IOException {
     req.setAttribute("firstEmployee", repository.findFirstEmployee());
     req.setAttribute("employeeMatch", Optional.empty());
-    req.setAttribute("query", "");
+    req.setAttribute(Twilio.QUERY_PARAM, "");
     req.getRequestDispatcher("index.jsp").forward(req, resp);
   }
 
@@ -58,7 +59,7 @@ public class IndexServlet extends HttpServlet {
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
       IOException {
-    Optional<String> fullNameQuery = Optional.of(req.getParameter("query"));
+    Optional<String> fullNameQuery = Optional.of(req.getParameter(Twilio.QUERY_PARAM));
     req.setAttribute("firstEmployee", Optional.empty());
     if (fullNameQuery.isPresent() && !fullNameQuery.get().trim().isEmpty()) {
       req.setAttribute("employeeMatch",
@@ -66,7 +67,7 @@ public class IndexServlet extends HttpServlet {
     } else {
       req.setAttribute("employeeMatch", fullNameQuery);
     }
-    req.setAttribute("query", fullNameQuery.orElse(""));
+    req.setAttribute(Twilio.QUERY_PARAM, fullNameQuery.orElse(""));
     req.getRequestDispatcher("index.jsp").forward(req, resp);
   }
 
@@ -74,6 +75,7 @@ public class IndexServlet extends HttpServlet {
   @Transactional
   public void init(ServletConfig config) throws ServletException {
     super.init(config);
+    config.getServletContext().setAttribute("query_param", Twilio.QUERY_PARAM);
     LOG.info("Seeding Marvel Heroes...");
     try {
       File employeeJsonFile = new File(getResourceURI());

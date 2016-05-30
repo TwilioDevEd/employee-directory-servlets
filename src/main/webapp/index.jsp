@@ -24,8 +24,8 @@
         </div>
     </c:if>
     <div>
-        <form method="post">
-            <input type="text" id="query" name="query" placeholder="query some superheroe" value="<c:out value="${query}"/>"/>
+        <form method="get">
+            <input type="text" required minlength="3" name="<c:out value="${query_param}"/>" placeholder="query some superheroe" value="<c:out value="${query}"/>"/>
             <input type="hidden" name="from" value="+15555555555" />
             <input type="submit" name="submit" value="Send"/>
             <c:if test="${employeeMatch.present}">
