@@ -1,4 +1,4 @@
-package com.twilio.employeedirectory.domain.matchers;
+package com.twilio.employeedirectory.domain.query;
 
 import com.twilio.sdk.verbs.Message;
 import com.twilio.sdk.verbs.TwiMLException;
@@ -16,14 +16,14 @@ public interface EmployeeMatch {
     public String getMessage();
 
     /**
-     * Gets the message in Twiml Response object
-     * @return {@link TwiMLResponse} not <code>null</code>
+     * Gets the message in Twiml format
+     * @return {@link String} not <code>null</code>
      */
-    public default TwiMLResponse getTwiMLResponse() throws TwiMLException
+    public default String getMessageTwiml() throws TwiMLException
     {
         TwiMLResponse twiMLResponse = new TwiMLResponse();
         twiMLResponse.append(new Message(getMessage()));
-        return twiMLResponse;
+        return twiMLResponse.toEscapedXML();
     }
 
     /**

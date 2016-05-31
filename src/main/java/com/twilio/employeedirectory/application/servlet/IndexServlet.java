@@ -3,10 +3,16 @@ package com.twilio.employeedirectory.application.servlet;
 
 import com.google.inject.persist.Transactional;
 import com.twilio.employeedirectory.domain.common.Twilio;
+import com.twilio.employeedirectory.domain.common.Utils;
 import com.twilio.employeedirectory.domain.error.EmployeeLoadException;
 import com.twilio.employeedirectory.domain.model.Employee;
+import com.twilio.employeedirectory.domain.query.EmployeeMatch;
+import com.twilio.employeedirectory.domain.query.MultiplePartialMatch;
+import com.twilio.employeedirectory.domain.query.NoMatch;
 import com.twilio.employeedirectory.domain.repository.EmployeeRepository;
 import com.twilio.employeedirectory.domain.service.EmployeeDirectoryService;
+import com.twilio.sdk.verbs.TwiMLException;
+import org.apache.http.NameValuePair;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.type.CollectionType;
 
@@ -14,6 +20,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -50,25 +57,17 @@ public class IndexServlet extends HttpServlet {
   public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
       IOException {
     req.setAttribute("firstEmployee", repository.findFirstEmployee());
-    req.setAttribute("employeeMatch", Optional.empty());
     req.setAttribute(Twilio.QUERY_PARAM, "");
     req.getRequestDispatcher("index.jsp").forward(req, resp);
   }
 
-
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
       IOException {
-    Optional<String> fullNameQuery = Optional.of(req.getParameter(Twilio.QUERY_PARAM));
+    Optional<String> fullNameQuery = Optional.ofNullable(req.getParameter(Twilio.QUERY_PARAM));
     req.setAttribute("firstEmployee", Optional.empty());
-    if (fullNameQuery.isPresent() && !fullNameQuery.get().trim().isEmpty()) {
-      req.setAttribute("employeeMatch",
-          Optional.of(employeeService.queryEmployee(fullNameQuery.get())));
-    } else {
-      req.setAttribute("employeeMatch", fullNameQuery);
-    }
     req.setAttribute(Twilio.QUERY_PARAM, fullNameQuery.orElse(""));
-    req.getRequestDispatcher("index.jsp").forward(req, resp);
+    req.getRequestDispatcher("lookup/employee").forward(req, resp);
   }
 
   @Override

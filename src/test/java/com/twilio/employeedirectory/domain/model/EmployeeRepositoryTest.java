@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.persistence.NoResultException;
 import java.util.List;
 import java.util.Optional;
 

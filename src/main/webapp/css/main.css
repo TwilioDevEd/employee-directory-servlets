@@ -19,3 +19,9 @@ footer i {
    margin: 2em auto;
    padding: 1em;
 }
+
+media, .media{
+    display: block;
+    margin: 1em 0;
+    max-width: 100%;
+}

@@ -9,3 +9,4 @@ target/
 *.sqlite
 *.env
 out/
+/.nb-gradle/
