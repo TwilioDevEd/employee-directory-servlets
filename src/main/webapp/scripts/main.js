@@ -3,8 +3,8 @@ $(document).ready(function(){
         e.preventDefault();
         var form = $(this);
         $.ajax({
-          type: 'GET',
-          url: "lookup/employee",
+          type: 'POST',
+          url: "directory/search",
           data: form.serialize(),
           dataType: "xml",
           success: function (xml, status, xhr){

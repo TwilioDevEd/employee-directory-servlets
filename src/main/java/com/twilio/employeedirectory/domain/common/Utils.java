@@ -46,7 +46,7 @@ public class Utils {
     Optional<Cookie[]> cookies = Optional.ofNullable(request.getCookies());
     if (cookies.isPresent()) {
       return Arrays.stream(cookies.get()).filter(c -> cookieName.equals(c.getName())).findFirst()
-          .map(c -> Utils.convertCookieAndDispose(c, response)).filter(l -> !l.isEmpty());
+          .map(c -> Utils.createOptionsAndDisposeCookie(c, response)).filter(l -> !l.isEmpty());
     } else {
       return Optional.empty();
     }
@@ -59,8 +59,8 @@ public class Utils {
    * @param response The response used to indicate the deleted cookies
    * @return {@link List<NameValuePair>} not <code>null</code>
    */
-  public static List<NameValuePair> convertCookieAndDispose(Cookie cookie,
-      HttpServletResponse response) {
+  public static List<NameValuePair> createOptionsAndDisposeCookie(Cookie cookie,
+                                                                  HttpServletResponse response) {
     String currentValue = cookie.getValue();
     cookie.setMaxAge(0);
     cookie.setValue("");

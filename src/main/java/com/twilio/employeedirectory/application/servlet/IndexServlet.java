@@ -3,16 +3,10 @@ package com.twilio.employeedirectory.application.servlet;
 
 import com.google.inject.persist.Transactional;
 import com.twilio.employeedirectory.domain.common.Twilio;
-import com.twilio.employeedirectory.domain.common.Utils;
 import com.twilio.employeedirectory.domain.error.EmployeeLoadException;
 import com.twilio.employeedirectory.domain.model.Employee;
-import com.twilio.employeedirectory.domain.query.EmployeeMatch;
-import com.twilio.employeedirectory.domain.query.MultiplePartialMatch;
-import com.twilio.employeedirectory.domain.query.NoMatch;
 import com.twilio.employeedirectory.domain.repository.EmployeeRepository;
 import com.twilio.employeedirectory.domain.service.EmployeeDirectoryService;
-import com.twilio.sdk.verbs.TwiMLException;
-import org.apache.http.NameValuePair;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.type.CollectionType;
 
@@ -20,7 +14,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -67,7 +60,7 @@ public class IndexServlet extends HttpServlet {
     Optional<String> fullNameQuery = Optional.ofNullable(req.getParameter(Twilio.QUERY_PARAM));
     req.setAttribute("firstEmployee", Optional.empty());
     req.setAttribute(Twilio.QUERY_PARAM, fullNameQuery.orElse(""));
-    req.getRequestDispatcher("lookup/employee").forward(req, resp);
+    req.getRequestDispatcher("directory/search").forward(req, resp);
   }
 
   @Override

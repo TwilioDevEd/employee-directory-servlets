@@ -1,6 +1,6 @@
 package com.twilio.employeedirectory.domain.common;
 
-import com.twilio.employeedirectory.application.servlet.EmployeeLookupServlet;
+import com.twilio.employeedirectory.application.servlet.EmployeeDirectoryServlet;
 import org.apache.http.NameValuePair;
 import org.junit.Assert;
 import org.junit.Test;
@@ -22,10 +22,10 @@ public class UtilsTest {
   public void testGetCookieAndDispose() throws Exception {
     HttpServletRequest request = mock(HttpServletRequest.class);
     HttpServletResponse response = mock(HttpServletResponse.class);
-    Cookie cookie = new Cookie(EmployeeLookupServlet.LAST_QUERY_COOKIE_NAME, "1=21&2=38&3=54");
+    Cookie cookie = new Cookie(EmployeeDirectoryServlet.SUGGESTIONS_COOKIE_NAME, "1=21&2=38&3=54");
     when(request.getCookies()).thenReturn(new Cookie[] {cookie});
     Optional<List<NameValuePair>> options =
-        Utils.getCookieAndDispose(request, response, EmployeeLookupServlet.LAST_QUERY_COOKIE_NAME);
+        Utils.getCookieAndDispose(request, response, EmployeeDirectoryServlet.SUGGESTIONS_COOKIE_NAME);
     Assert.assertTrue("There must be options", options.isPresent());
     Assert.assertEquals("The count of options is wrong", options.get().size(), 3);
   }
@@ -33,8 +33,8 @@ public class UtilsTest {
   @Test
   public void testConvertCookieAndDispose() throws Exception {
     HttpServletResponse response = mock(HttpServletResponse.class);
-    Cookie cookie = new Cookie(EmployeeLookupServlet.LAST_QUERY_COOKIE_NAME, "1=21&2=38&3=54");
-    List<NameValuePair> nameValuePairs = Utils.convertCookieAndDispose(cookie, response);
+    Cookie cookie = new Cookie(EmployeeDirectoryServlet.SUGGESTIONS_COOKIE_NAME, "1=21&2=38&3=54");
+    List<NameValuePair> nameValuePairs = Utils.createOptionsAndDisposeCookie(cookie, response);
     Assert.assertEquals("The count of options is wrong", nameValuePairs.size(), 3);
     Iterator<NameValuePair> valuesIterator = nameValuePairs.iterator();
     NameValuePair currentVal = valuesIterator.next();

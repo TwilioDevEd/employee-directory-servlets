@@ -1,7 +1,7 @@
 package com.twilio.employeedirectory.application.servlet;
 
 import com.twilio.employeedirectory.domain.query.EmployeeMatch;
-import com.twilio.employeedirectory.domain.query.MultiplePartialMatch;
+import com.twilio.employeedirectory.domain.query.MultipleMatch;
 import com.twilio.employeedirectory.domain.query.PerfectMatch;
 import com.twilio.employeedirectory.domain.model.Employee;
 import com.twilio.employeedirectory.domain.service.EmployeeDirectoryService;
@@ -20,7 +20,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verify;
 
-public class EmployeeLookupServletTest {
+public class EmployeeDirectoryServletTest {
 
   @Test
   public void shouldReturnTwimlContentForPerfectMatch() throws IOException, TwiMLException {
@@ -33,13 +33,13 @@ public class EmployeeLookupServletTest {
 
     when(employeeService.queryEmployee("Spider", Optional.empty())).thenReturn(expectedMatch);
 
-    EmployeeLookupServlet employeeLookupServlet = new EmployeeLookupServlet(employeeService);
+    EmployeeDirectoryServlet employeeDirectoryServlet = new EmployeeDirectoryServlet(employeeService);
     HttpServletResponse response = mock(HttpServletResponse.class);
     PrintWriter printWriter = mock(PrintWriter.class);
     when(response.getWriter()).thenReturn(printWriter);
     HttpServletRequest request = mock(HttpServletRequest.class);
     when(request.getParameter(anyString())).thenReturn("Spider");
-    employeeLookupServlet.doGet(request, response);
+    employeeDirectoryServlet.doPost(request, response);
 
     verify(printWriter, times(1)).print(expectedMatch.getMessageTwiml());
   }
@@ -55,16 +55,16 @@ public class EmployeeLookupServletTest {
       Employee secondEmployee = new Employee("Iron Man", "ironMan@heroes.example.com", "+14155559368",
               "http://i.annihil.us/u/prod/marvel/i/mg/9/c0/527bb7b37ff55.jpg");
       secondEmployee.setId(21L);
-      when(employeeService.queryEmployee("Man", Optional.empty())).thenReturn(new MultiplePartialMatch(Arrays.asList(firstEmployee, secondEmployee)));
+      when(employeeService.queryEmployee("Man", Optional.empty())).thenReturn(new MultipleMatch(Arrays.asList(firstEmployee, secondEmployee)));
 
-      EmployeeLookupServlet employeeLookupServlet = new EmployeeLookupServlet(employeeService);
+      EmployeeDirectoryServlet employeeDirectoryServlet = new EmployeeDirectoryServlet(employeeService);
       HttpServletResponse response = mock(HttpServletResponse.class);
       HttpServletRequest request = mock(HttpServletRequest.class);
       when(request.getParameter(anyString())).thenReturn("Man");
       PrintWriter printWriter = mock(PrintWriter.class);
       when(response.getWriter()).thenReturn(printWriter);
-      employeeLookupServlet.doGet(request, response);
-      verify(response, times(1)).addCookie(refEq(new Cookie(EmployeeLookupServlet.LAST_QUERY_COOKIE_NAME, "1=12&2=21")));
+      employeeDirectoryServlet.doPost(request, response);
+      verify(response, times(1)).addCookie(refEq(new Cookie(EmployeeDirectoryServlet.SUGGESTIONS_COOKIE_NAME, "1=12&2=21")));
   }
 
 }
