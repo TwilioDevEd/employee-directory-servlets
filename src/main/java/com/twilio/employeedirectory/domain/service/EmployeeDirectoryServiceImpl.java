@@ -72,10 +72,9 @@ public class EmployeeDirectoryServiceImpl implements EmployeeDirectoryService {
    */
   protected Optional<Employee> getRequestedEmployee(String optionIndex,
       Optional<List<NameValuePair>> availableOptions) {
-    return availableOptions
-        .map(
-            options -> options.stream().filter(pair -> pair.getName().equals(optionIndex))
-                .findFirst()).map(this::getEmployeeFromOption).orElse(Optional.empty());
+    List<NameValuePair> nameValuePairs = availableOptions.get();
+    return nameValuePairs.stream().filter(pair -> pair.getName().equals(optionIndex))
+            .findFirst().flatMap(this::getEmployeeFromOption);
   }
 
   /**
@@ -84,10 +83,10 @@ public class EmployeeDirectoryServiceImpl implements EmployeeDirectoryService {
    * @param choosenOption an {@link Optional} of {@link NameValuePair} linking the chosen option
    *        index with the wanted {@link Employee#id}
    * @return an {@code Optional with the {@link Employee} found, not <code>null</code>
-   */
-  protected Optional<Employee> getEmployeeFromOption(Optional<NameValuePair> choosenOption) {
-    return choosenOption.map(option -> Utils.getOptionalLong(option.getValue())).map(
-        id -> repository.findEmployeeById(id.get()).get());
+  */
+
+  private Optional<Employee> getEmployeeFromOption(NameValuePair choosenOption) {
+    return Utils.getOptionalLong(choosenOption.getValue()).map(id -> repository.findEmployeeById(id)).get();
   }
 
 }
