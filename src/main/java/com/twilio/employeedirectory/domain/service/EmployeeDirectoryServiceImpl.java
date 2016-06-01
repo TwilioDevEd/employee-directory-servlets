@@ -84,7 +84,7 @@ public class EmployeeDirectoryServiceImpl implements EmployeeDirectoryService {
   */
 
   private Optional<Employee> getEmployeeFromOption(NameValuePair choosenOption) {
-    return Utils.getOptionalLong(choosenOption.getValue()).map(id -> repository.findEmployeeById(id)).get();
+    return Utils.getOptionalLong(choosenOption.getValue()).flatMap(id -> repository.findEmployeeById(id));
   }
 
 }
