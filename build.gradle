@@ -37,3 +37,6 @@ dependencies {
 task wrapper(type: Wrapper) {
     gradleVersion = '2.3'
 }
+
+//Change context path (base url). otherwise defaults to name of project
+gretty.contextPath = ''

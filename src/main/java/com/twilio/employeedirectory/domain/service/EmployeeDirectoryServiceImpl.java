@@ -3,7 +3,7 @@ package com.twilio.employeedirectory.domain.service;
 import com.twilio.employeedirectory.domain.common.Utils;
 import com.twilio.employeedirectory.domain.model.Employee;
 import com.twilio.employeedirectory.domain.query.EmployeeMatch;
-import com.twilio.employeedirectory.domain.query.MultiplePartialMatch;
+import com.twilio.employeedirectory.domain.query.MultipleMatch;
 import com.twilio.employeedirectory.domain.query.NoMatch;
 import com.twilio.employeedirectory.domain.query.PerfectMatch;
 import com.twilio.employeedirectory.domain.repository.EmployeeRepository;
@@ -11,13 +11,12 @@ import org.apache.http.NameValuePair;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.swing.text.html.Option;
-import java.util.LinkedList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Handle service for Employees
+ * Handle the Employee Directory Search Logic
  */
 @Singleton
 public class EmployeeDirectoryServiceImpl implements EmployeeDirectoryService {
@@ -32,21 +31,18 @@ public class EmployeeDirectoryServiceImpl implements EmployeeDirectoryService {
   @Override
   public EmployeeMatch queryEmployee(String fullName, Optional<List<NameValuePair>> lastQuery) {
     Optional<Employee> requestedEmployee = getRequestedEmployee(fullName, lastQuery);
-    List<Employee> matchedEmployees = requestedEmployee.map(employee -> {
-      List employees = new LinkedList<>();
-      employees.add(requestedEmployee.get());
-      return employees;
-    }).orElse(repository.findEmployeeByFullName(fullName));
-    return convertToEmployeeMatch(matchedEmployees);
+    List<Employee> matchedEmployees = requestedEmployee.map(Arrays::asList)
+            .orElse(repository.findEmployeeByFullName(fullName));
+    return createEmployeeMatch(matchedEmployees);
   }
 
   /**
-   * Converts found Employees to an implementation of {@link EmployeeMatch}
+   * Creates an {@link EmployeeMatch} base on the employees found
    *
    * @param foundEmployees A List of {@link Employee}
    * @return An {@link EmployeeMatch} indicating a particular type of result, not <code>null</code>
    */
-  protected EmployeeMatch convertToEmployeeMatch(List<Employee> foundEmployees) {
+  protected EmployeeMatch createEmployeeMatch(List<Employee> foundEmployees) {
     final EmployeeMatch response;
     switch (foundEmployees.size()) {
       case 0:
@@ -56,7 +52,7 @@ public class EmployeeDirectoryServiceImpl implements EmployeeDirectoryService {
         response = new PerfectMatch(foundEmployees.get(0));
         break;
       default:
-        response = new MultiplePartialMatch(foundEmployees);
+        response = new MultipleMatch(foundEmployees);
     }
     return response;
   }
@@ -72,22 +68,17 @@ public class EmployeeDirectoryServiceImpl implements EmployeeDirectoryService {
    */
   protected Optional<Employee> getRequestedEmployee(String optionIndex,
       Optional<List<NameValuePair>> availableOptions) {
-    return availableOptions
-        .map(
-            options -> options.stream().filter(pair -> pair.getName().equals(optionIndex))
-                .findFirst()).map(this::getEmployeeFromOption).orElse(Optional.empty());
+    if (availableOptions.isPresent()) {
+      Optional<NameValuePair> choosenOption =
+          availableOptions.get().stream().filter(pair -> pair.getName().equals(optionIndex))
+              .findFirst();
+      if (choosenOption.isPresent()) {
+        Optional<Long> selectedId = Utils.getOptionalLong(choosenOption.get().getValue());
+        if (selectedId.isPresent()) {
+          return repository.findEmployeeById(selectedId.get());
+        }
+      }
+    }
+    return Optional.empty();
   }
-
-  /**
-   * Given some option returns the correspondant {@link Employee}
-   *
-   * @param choosenOption an {@link Optional} of {@link NameValuePair} linking the chosen option
-   *        index with the wanted {@link Employee#id}
-   * @return an {@code Optional with the {@link Employee} found, not <code>null</code>
-   */
-  protected Optional<Employee> getEmployeeFromOption(Optional<NameValuePair> choosenOption) {
-    return choosenOption.map(option -> Utils.getOptionalLong(option.getValue())).map(
-        id -> repository.findEmployeeById(id.get()).get());
-  }
-
 }

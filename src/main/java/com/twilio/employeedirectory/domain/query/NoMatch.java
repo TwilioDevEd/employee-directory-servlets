@@ -1,10 +1,9 @@
 package com.twilio.employeedirectory.domain.query;
 
 /**
- * When there is no match for the queried name
+ * When there's no match for the query
  */
 public class NoMatch implements EmployeeMatch {
-
 
   public NoMatch() {}
 
@@ -12,5 +11,4 @@ public class NoMatch implements EmployeeMatch {
   public String getMessage() {
     return "We did not find the employee you're looking for";
   }
-
 }

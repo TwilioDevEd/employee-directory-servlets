@@ -7,11 +7,10 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 
-public class MultiplePartialMatchTest {
+public class MultipleMatchTest {
 
     @Test
     public void testGetLastQueryId() throws Exception {
@@ -23,7 +22,7 @@ public class MultiplePartialMatchTest {
         Employee secondEmployee = new Employee("Iron Man", "ironMan@heroes.example.com", "+14155559368",
                 "http://i.annihil.us/u/prod/marvel/i/mg/9/c0/527bb7b37ff55.jpg");
         secondEmployee.setId(21L);
-        MultiplePartialMatch match = new MultiplePartialMatch(Arrays.asList(firstEmployee,secondEmployee));
-        Assert.assertEquals("The query str didnt was the expected", "1=12&2=21", match.getLastQueryOptions());
+        MultipleMatch match = new MultipleMatch(Arrays.asList(firstEmployee,secondEmployee));
+        Assert.assertEquals("The query str didnt was the expected", "1=12&2=21", match.getEmployeeSuggestions());
     }
 }

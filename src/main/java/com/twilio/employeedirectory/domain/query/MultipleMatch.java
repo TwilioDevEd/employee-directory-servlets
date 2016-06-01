@@ -12,13 +12,13 @@ import java.util.stream.IntStream;
 /**
  * When the response returns multiple results which are not perfect match of the queried name
  */
-public class MultiplePartialMatch implements EmployeeMatch {
+public class MultipleMatch implements EmployeeMatch {
 
   private final List<Employee> foundEmployees;
 
   private String lastQueryId;
 
-  public MultiplePartialMatch(List<Employee> foundEmployees) {
+  public MultipleMatch(List<Employee> foundEmployees) {
     this.foundEmployees = foundEmployees;
   }
 
@@ -34,13 +34,12 @@ public class MultiplePartialMatch implements EmployeeMatch {
     return foundEmployees;
   }
 
-
   /**
-   * Returns some string which the url query of the options given by this {@linnk EmployeeMatch}
+   * Returns a url query string with indexed suggestions of {@link EmployeeMatch}
    * 
    * @return {@link String} not <code>null</code>
    */
-  public String getLastQueryOptions() {
+  public String getEmployeeSuggestions() {
     if (lastQueryId == null) {
       List<BasicNameValuePair> params = new LinkedList<>();
       IntStream
@@ -53,5 +52,4 @@ public class MultiplePartialMatch implements EmployeeMatch {
     }
     return lastQueryId;
   }
-
 }
