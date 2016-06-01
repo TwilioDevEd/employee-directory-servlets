@@ -30,8 +30,8 @@ public class EmployeeDirectoryServiceImpl implements EmployeeDirectoryService {
   }
 
   @Override
-  public EmployeeMatch queryEmployee(String fullName, Optional<List<NameValuePair>> lastQuery) {
-    Optional<Employee> requestedEmployee = getRequestedEmployee(fullName, lastQuery.get());
+  public EmployeeMatch queryEmployee(String fullName, List<NameValuePair> lastQuery) {
+    Optional<Employee> requestedEmployee = getRequestedEmployee(fullName, lastQuery);
     List<Employee> matchedEmployees = requestedEmployee.map(employee -> {
       List employees = new LinkedList<>();
       employees.add(requestedEmployee.get());

@@ -24,10 +24,9 @@ public class UtilsTest {
     HttpServletResponse response = mock(HttpServletResponse.class);
     Cookie cookie = new Cookie(EmployeeLookupServlet.LAST_QUERY_COOKIE_NAME, "1=21&2=38&3=54");
     when(request.getCookies()).thenReturn(new Cookie[] {cookie});
-    Optional<List<NameValuePair>> options =
+    List<NameValuePair> options =
         Utils.getCookieAndDispose(request, response, EmployeeLookupServlet.LAST_QUERY_COOKIE_NAME);
-    Assert.assertTrue("There must be options", options.isPresent());
-    Assert.assertEquals("The count of options is wrong", options.get().size(), 3);
+    Assert.assertEquals("The count of options is wrong", options.size(), 3);
   }
 
   @Test

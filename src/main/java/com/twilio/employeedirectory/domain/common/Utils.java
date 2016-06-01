@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,14 +42,14 @@ public class Utils {
    * @param cookieName Name of the cookie
    * @return Optional of {@link List<NameValuePair>} not <code>null</code>
    */
-  public static Optional<List<NameValuePair>> getCookieAndDispose(HttpServletRequest request,
-      HttpServletResponse response, String cookieName) {
+  public static List<NameValuePair> getCookieAndDispose(HttpServletRequest request,
+                                                                  HttpServletResponse response, String cookieName) {
     Optional<Cookie[]> cookies = Optional.ofNullable(request.getCookies());
     if (cookies.isPresent()) {
       return Arrays.stream(cookies.get()).filter(c -> cookieName.equals(c.getName())).findFirst()
-          .map(c -> Utils.convertCookieAndDispose(c, response)).filter(l -> !l.isEmpty());
+              .map(c -> Utils.convertCookieAndDispose(c, response)).filter(l -> !l.isEmpty()).get();
     } else {
-      return Optional.empty();
+      return Collections.emptyList();
     }
   }
 

@@ -2,7 +2,6 @@ package com.twilio.employeedirectory.application.servlet;
 
 import com.twilio.employeedirectory.domain.common.Twilio;
 import com.twilio.employeedirectory.domain.common.Utils;
-import com.twilio.employeedirectory.domain.model.Employee;
 import com.twilio.employeedirectory.domain.query.EmployeeMatch;
 import com.twilio.employeedirectory.domain.query.MultiplePartialMatch;
 import com.twilio.employeedirectory.domain.query.NoMatch;
@@ -62,7 +61,7 @@ public class EmployeeLookupServlet extends HttpServlet {
   }
 
   private EmployeeMatch getEmployeeMatch(HttpServletRequest request, HttpServletResponse response, String queryValue) {
-    Optional<List<NameValuePair>> optionsOfEmployees =
+    List<NameValuePair> optionsOfEmployees =
         Utils.getCookieAndDispose(request, response, LAST_QUERY_COOKIE_NAME);
     return employeeDirectoryService.queryEmployee(queryValue, optionsOfEmployees);
   }
