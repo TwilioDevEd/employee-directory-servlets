@@ -31,7 +31,7 @@ public class EmployeeDirectoryServiceImpl implements EmployeeDirectoryService {
 
   @Override
   public EmployeeMatch queryEmployee(String fullName, Optional<List<NameValuePair>> lastQuery) {
-    Optional<Employee> requestedEmployee = getRequestedEmployee(fullName, lastQuery);
+    Optional<Employee> requestedEmployee = getRequestedEmployee(fullName, lastQuery.get());
     List<Employee> matchedEmployees = requestedEmployee.map(employee -> {
       List employees = new LinkedList<>();
       employees.add(requestedEmployee.get());
@@ -70,10 +70,8 @@ public class EmployeeDirectoryServiceImpl implements EmployeeDirectoryService {
    * @return an {@link Optional} with the {@link Employee} correspondant to the
    *         <code>optionIndex</code>
    */
-  protected Optional<Employee> getRequestedEmployee(String optionIndex,
-      Optional<List<NameValuePair>> availableOptions) {
-    List<NameValuePair> nameValuePairs = availableOptions.get();
-    return nameValuePairs.stream().filter(pair -> pair.getName().equals(optionIndex))
+  private Optional<Employee> getRequestedEmployee(String optionIndex, List<NameValuePair> availableOptions) {
+    return availableOptions.stream().filter(pair -> pair.getName().equals(optionIndex))
             .findFirst().flatMap(this::getEmployeeFromOption);
   }
 
