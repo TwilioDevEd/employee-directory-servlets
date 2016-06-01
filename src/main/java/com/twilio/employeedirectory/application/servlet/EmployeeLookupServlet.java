@@ -36,24 +36,34 @@ public class EmployeeLookupServlet extends HttpServlet {
     Optional<String> fullNameQuery = Optional.ofNullable(request.getParameter(Twilio.QUERY_PARAM));
     final EmployeeMatch matchResponse =
         fullNameQuery.map(
-            queryValue -> {
-              Optional<List<NameValuePair>> optionsOfEmployees =
-                  Utils.getCookieAndDispose(request, response, LAST_QUERY_COOKIE_NAME);
-              return employeeDirectoryService.queryEmployee(queryValue, optionsOfEmployees);
-            }).orElse(new NoMatch());
+            queryValue -> getEmployeeMatch(request, response, queryValue)).orElse(new NoMatch());
     request.setAttribute("employeeMatch", matchResponse);
+    returnMatch(response, matchResponse);
+  }
+
+  private void returnMatch(HttpServletResponse response, EmployeeMatch matchResponse) throws IOException {
     try {
       // Only MultiplePartialMatch caches its response in a cookie
       if (matchResponse instanceof MultiplePartialMatch) {
-        Cookie lastQueryCookie =
-            new Cookie(LAST_QUERY_COOKIE_NAME,
-                ((MultiplePartialMatch) matchResponse).getLastQueryOptions());
-        response.addCookie(lastQueryCookie);
+        cache(response, (MultiplePartialMatch) matchResponse);
       }
       response.setContentType("text/xml");
       response.getWriter().print(matchResponse.getMessageTwiml());
     } catch (TwiMLException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  private void cache(HttpServletResponse response, MultiplePartialMatch matchResponse) {
+    Cookie lastQueryCookie =
+        new Cookie(LAST_QUERY_COOKIE_NAME,
+            matchResponse.getLastQueryOptions());
+    response.addCookie(lastQueryCookie);
+  }
+
+  private EmployeeMatch getEmployeeMatch(HttpServletRequest request, HttpServletResponse response, String queryValue) {
+    Optional<List<NameValuePair>> optionsOfEmployees =
+        Utils.getCookieAndDispose(request, response, LAST_QUERY_COOKIE_NAME);
+    return employeeDirectoryService.queryEmployee(queryValue, optionsOfEmployees);
   }
 }
