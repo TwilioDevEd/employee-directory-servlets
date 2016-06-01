@@ -62,7 +62,7 @@ public class EmployeeLookupServlet extends HttpServlet {
 
   private EmployeeMatch getEmployeeMatch(HttpServletRequest request, HttpServletResponse response, String queryValue) {
     List<NameValuePair> optionsOfEmployees =
-        Utils.getCookieAndDispose(request, response, LAST_QUERY_COOKIE_NAME);
+        Utils.getCookieAndDispose(response, LAST_QUERY_COOKIE_NAME, request.getCookies());
     return employeeDirectoryService.queryEmployee(queryValue, optionsOfEmployees);
   }
 }

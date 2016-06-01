@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -25,7 +24,7 @@ public class UtilsTest {
     Cookie cookie = new Cookie(EmployeeLookupServlet.LAST_QUERY_COOKIE_NAME, "1=21&2=38&3=54");
     when(request.getCookies()).thenReturn(new Cookie[] {cookie});
     List<NameValuePair> options =
-        Utils.getCookieAndDispose(request, response, EmployeeLookupServlet.LAST_QUERY_COOKIE_NAME);
+        Utils.getCookieAndDispose(response, EmployeeLookupServlet.LAST_QUERY_COOKIE_NAME, request.getCookies());
     Assert.assertEquals("The count of options is wrong", options.size(), 3);
   }
 
