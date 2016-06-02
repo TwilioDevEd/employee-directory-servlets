@@ -1,6 +1,7 @@
 # SMS/MMS Employee Directory on Servlets
 
-[![Build status](//ci.appveyor.com/api/projects/status/github/TwilioDevEd/employee-directory-servlets?svg=true)](//ci.appveyor.com/project/TwilioDevEd/employee-directory-servlets)
+[![Build Status](https://travis-ci.org/TwilioDevEd/employee-directory-servlets.svg?branch=master)](https://travis-ci.org/TwilioDevEd/employee-directory-servlets)
+[![Coverage Status](https://coveralls.io/repos/github/TwilioDevEd/employee-directory-servlets/badge.svg?branch=master)](https://coveralls.io/github/TwilioDevEd/employee-directory-servlets?branch=master)
 
 Use Twilio to accept SMS messages and translate them into queries against a SQL database. This example functions as an Employee Directory where a mobile phone user can send a text message with a partial string of the person's name and it will return their picture and contact information (Email address and Phone number).
 
