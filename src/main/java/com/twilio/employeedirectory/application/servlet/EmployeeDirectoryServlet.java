@@ -24,21 +24,26 @@ public class EmployeeDirectoryServlet extends HttpServlet {
 
   public static final String SUGGESTIONS_COOKIE_NAME = "last-query";
 
-  private EmployeeDirectoryService employeeDirectoryService;
+  private final EmployeeDirectoryService employeeDirectoryService;
 
   @Inject
-  public EmployeeDirectoryServlet(EmployeeDirectoryService employeeDirectoryService) {
+  public EmployeeDirectoryServlet(final EmployeeDirectoryService
+                                            employeeDirectoryService) {
     this.employeeDirectoryService = employeeDirectoryService;
   }
 
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Optional<String> fullNameQuery = Optional.ofNullable(request.getParameter(Twilio.QUERY_PARAM));
-    final EmployeeMatch matchResponse =
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+          throws IOException {
+    Optional<String> fullNameQuery = Optional.ofNullable(request
+            .getParameter(Twilio.QUERY_PARAM));
+    EmployeeMatch matchResponse =
         fullNameQuery.map(
             queryValue -> {
               Optional<List<NameValuePair>> optionsOfEmployees =
-                  Utils.getCookieAndDispose(request, response, SUGGESTIONS_COOKIE_NAME);
-              return employeeDirectoryService.queryEmployee(queryValue, optionsOfEmployees);
+                  Utils.getCookieAndDispose(request, response,
+                          SUGGESTIONS_COOKIE_NAME);
+              return employeeDirectoryService.queryEmployee(queryValue,
+                      optionsOfEmployees);
             }).orElse(new NoMatch());
     request.setAttribute("employeeMatch", matchResponse);
     try {

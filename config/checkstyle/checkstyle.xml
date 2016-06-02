@@ -15,6 +15,7 @@
         <property name="message" value="Line has trailing spaces."/>
     </module>
     <module name="TreeWalker">
+        <property name="tabWidth" value="2"/>
         <module name="ConstantName"/>
         <module name="LocalFinalVariableName"/>
         <module name="LocalVariableName"/>
@@ -63,7 +64,7 @@
         <module name="InterfaceIsType"/>
         <module name="VisibilityModifier"/>
         <module name="ArrayTypeStyle"/>
-        <module name="FinalParameters"/>
+        <!--module name="FinalParameters"/-->
         <module name="TodoComment"/>
         <module name="UpperEll"/>
     </module>

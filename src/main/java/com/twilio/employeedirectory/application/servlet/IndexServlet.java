@@ -28,26 +28,25 @@ import java.util.logging.Logger;
 @Singleton
 public class IndexServlet extends HttpServlet {
 
-  private static final Logger LOG = Logger.getLogger(IndexServlet.class.getName());
+  private static final Logger LOG = Logger.getLogger(
+          IndexServlet.class.getName());
 
   private static final String JSON_PATH = "seed-data.json";
 
-  private EmployeeRepository repository;
+  private final EmployeeRepository repository;
 
-  private EmployeeDirectoryService employeeService;
+  private final EmployeeDirectoryService employeeService;
 
   @Inject
-  public IndexServlet(EmployeeRepository repository, EmployeeDirectoryService employeeService) {
+  public IndexServlet(final EmployeeRepository repository,
+                      final EmployeeDirectoryService employeeService) {
     this.repository = repository;
     this.employeeService = employeeService;
   }
 
-  public IndexServlet(EmployeeRepository employeeRepository) {
-
-  }
-
   @Override
-  public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
+  public void doGet(HttpServletRequest req, HttpServletResponse resp)
+          throws ServletException,
       IOException {
     req.setAttribute("firstEmployee", repository.findFirstEmployee());
     req.setAttribute(Twilio.QUERY_PARAM, "");
@@ -55,9 +54,11 @@ public class IndexServlet extends HttpServlet {
   }
 
   @Override
-  protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
+  protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+          throws ServletException,
       IOException {
-    Optional<String> fullNameQuery = Optional.ofNullable(req.getParameter(Twilio.QUERY_PARAM));
+    Optional<String> fullNameQuery = Optional.ofNullable(req
+            .getParameter(Twilio.QUERY_PARAM));
     req.setAttribute("firstEmployee", Optional.empty());
     req.setAttribute(Twilio.QUERY_PARAM, fullNameQuery.orElse(""));
     req.getRequestDispatcher("directory/search").forward(req, resp);
@@ -74,8 +75,10 @@ public class IndexServlet extends HttpServlet {
 
       ObjectMapper objectMapper = new ObjectMapper();
       CollectionType collectionType =
-          objectMapper.getTypeFactory().constructCollectionType(List.class, Employee.class);
-      List<Employee> employees = objectMapper.readValue(employeeJsonFile, collectionType);
+          objectMapper.getTypeFactory().constructCollectionType(List.class,
+                  Employee.class);
+      List<Employee> employees = objectMapper.readValue(employeeJsonFile,
+              collectionType);
       repository.addAll(employees);
     } catch (Exception e) {
       throw new EmployeeLoadException(e);
@@ -84,15 +87,17 @@ public class IndexServlet extends HttpServlet {
 
   private URI getResourceURI() {
     Optional<URL> url =
-        Optional.ofNullable(this.getClass().getResource(File.separator + JSON_PATH));
-    return url.map((URL u) -> {
+        Optional.ofNullable(this.getClass().getResource(File.separator
+                + JSON_PATH));
+    return url.map(u -> {
       try {
         return u.toURI();
       } catch (Exception e) {
-        throw new RuntimeException(e);
+        throw new EmployeeLoadException(e);
       }
     }).orElseThrow(
-        () -> new EmployeeLoadException(String.format("Not possible to retrieve resource: %s",
+        () -> new EmployeeLoadException(String
+                .format("Not possible to retrieve resource: %s",
             JSON_PATH)));
   }
 }
