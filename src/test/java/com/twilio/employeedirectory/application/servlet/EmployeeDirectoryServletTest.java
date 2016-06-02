@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.mockito.Matchers.anyString;
@@ -31,7 +32,7 @@ public class EmployeeDirectoryServletTest {
     foundEmployee.setId(1L);
     EmployeeMatch expectedMatch = new PerfectMatch(foundEmployee);
 
-    when(employeeService.queryEmployee("Spider", Optional.empty())).thenReturn(expectedMatch);
+    when(employeeService.queryEmployee("Spider", Collections.emptyList())).thenReturn(expectedMatch);
 
     EmployeeDirectoryServlet employeeDirectoryServlet = new EmployeeDirectoryServlet(employeeService);
     HttpServletResponse response = mock(HttpServletResponse.class);
@@ -55,7 +56,9 @@ public class EmployeeDirectoryServletTest {
       Employee secondEmployee = new Employee("Iron Man", "ironMan@heroes.example.com", "+14155559368",
               "http://i.annihil.us/u/prod/marvel/i/mg/9/c0/527bb7b37ff55.jpg");
       secondEmployee.setId(21L);
-      when(employeeService.queryEmployee("Man", Optional.empty())).thenReturn(new MultipleMatch(Arrays.asList(firstEmployee, secondEmployee)));
+      when(employeeService.queryEmployee("Man", Collections.emptyList()))
+              .thenReturn(new MultipleMatch(Arrays.asList(firstEmployee,
+                      secondEmployee)));
 
       EmployeeDirectoryServlet employeeDirectoryServlet = new EmployeeDirectoryServlet(employeeService);
       HttpServletResponse response = mock(HttpServletResponse.class);

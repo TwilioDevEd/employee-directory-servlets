@@ -4,12 +4,13 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Complementary functions
@@ -33,22 +34,24 @@ public class Utils {
   }
 
   /**
-   * Converts a cookie specified by its name to some list of {@link NameValuePair} and removes from
-   * the browser.
+   * Converts a cookie specified by its name to some list of
+   * {@link NameValuePair} and removes from the browser.
    *
-   * @param request The request with the cookies
    * @param response The response used to indicate the deleted cookies
    * @param cookieName Name of the cookie
+   * @param cookies
    * @return Optional of {@link List<NameValuePair>} not <code>null</code>
    */
-  public static Optional<List<NameValuePair>> getCookieAndDispose(HttpServletRequest request,
-      HttpServletResponse response, String cookieName) {
-    Optional<Cookie[]> cookies = Optional.ofNullable(request.getCookies());
-    if (cookies.isPresent()) {
-      return Arrays.stream(cookies.get()).filter(c -> cookieName.equals(c.getName())).findFirst()
-          .map(c -> Utils.createOptionsAndDisposeCookie(c, response)).filter(l -> !l.isEmpty());
+  public static List<NameValuePair> getCookieAndDispose(HttpServletResponse response,
+                                          String cookieName, Cookie[] cookies) {
+    if (cookies != null) {
+      Stream<Cookie> filteredByName = Arrays.stream(cookies)
+              .filter(c -> cookieName.equals(c.getName()));
+      Optional<Cookie> firstCookie = filteredByName.findFirst();
+      return firstCookie.map(c -> Utils.createOptionsAndDisposeCookie(c, response))
+              .orElse(Collections.emptyList());
     } else {
-      return Optional.empty();
+      return Collections.emptyList();
     }
   }
 
