@@ -5,7 +5,7 @@ package com.twilio.employeedirectory.domain.query;
  */
 public class NoMatch implements EmployeeMatch {
 
-  public NoMatch() {}
+  public NoMatch() { }
 
   @Override
   public String getMessage() {

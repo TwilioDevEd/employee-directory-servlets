@@ -4,6 +4,9 @@ plugins {
     id 'checkstyle'
     id 'org.akhikhl.gretty' version '1.2.4'
 }
+checkstyle {
+    toolVersion = "6.1.1"
+}
 
 group 'com.twilio.employeedirectory'
 version '1.0'

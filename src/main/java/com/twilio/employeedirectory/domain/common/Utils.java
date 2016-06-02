@@ -15,9 +15,9 @@ import java.util.stream.Stream;
 /**
  * Complementary functions
  */
-public class Utils {
+public final class Utils {
 
-  private Utils() {}
+  private Utils() { }
 
   /**
    * Returns an Long from the string or returns {@link Optional#empty()}
@@ -43,13 +43,13 @@ public class Utils {
    * @return Optional of {@link List<NameValuePair>} not <code>null</code>
    */
   public static List<NameValuePair> getCookieAndDispose(HttpServletResponse response,
-                                          String cookieName, Cookie[] cookies) {
+      String cookieName, Cookie[] cookies) {
     if (cookies != null) {
-      Stream<Cookie> filteredByName = Arrays.stream(cookies)
-              .filter(c -> cookieName.equals(c.getName()));
+      Stream<Cookie> filteredByName =
+          Arrays.stream(cookies).filter(c -> cookieName.equals(c.getName()));
       Optional<Cookie> firstCookie = filteredByName.findFirst();
-      return firstCookie.map(c -> Utils.createOptionsAndDisposeCookie(c, response))
-              .orElse(Collections.emptyList());
+      return firstCookie.map(c -> Utils.createOptionsAndDisposeCookie(c, response)).orElse(
+          Collections.emptyList());
     } else {
       return Collections.emptyList();
     }
@@ -57,13 +57,13 @@ public class Utils {
 
   /**
    * Convert a cookie to some {@link NameValuePair} list and removes it
-   * 
+   *
    * @param cookie Instance of cookie not <code>null</code>
    * @param response The response used to indicate the deleted cookies
    * @return {@link List<NameValuePair>} not <code>null</code>
    */
   public static List<NameValuePair> createOptionsAndDisposeCookie(Cookie cookie,
-                                                                  HttpServletResponse response) {
+      HttpServletResponse response) {
     String currentValue = cookie.getValue();
     cookie.setMaxAge(0);
     cookie.setValue("");

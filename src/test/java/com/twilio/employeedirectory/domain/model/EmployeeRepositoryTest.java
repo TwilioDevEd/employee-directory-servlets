@@ -10,7 +10,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.persistence.NoResultException;
 import java.util.List;
 import java.util.Optional;
 
@@ -83,12 +82,10 @@ public class EmployeeRepositoryTest {
 
   @Test
   public void shouldReturnOneEmployee() {
-    populateDatabase(
-            new Employee("Spider-Man", "spider-man@heroes.example.com", "+14155559610",
-        "http://i.annihil.us/u/prod/marvel/i/mg/3/50/526548a343e4b.jpg"),
-            new Employee("Iron Man", "ironMan@heroes.example.com", "+14155559368",
-        "http://i.annihil.us/u/prod/marvel/i/mg/9/c0/527bb7b37ff55.jpg")
-    );
+    populateDatabase(new Employee("Spider-Man", "spider-man@heroes.example.com", "+14155559610",
+        "http://i.annihil.us/u/prod/marvel/i/mg/3/50/526548a343e4b.jpg"), new Employee("Iron Man",
+        "ironMan@heroes.example.com", "+14155559368",
+        "http://i.annihil.us/u/prod/marvel/i/mg/9/c0/527bb7b37ff55.jpg"));
 
     List<Employee> foundEmployees = employeeRepository.findEmployeeByFullName("Spide");
     Assert.assertEquals("The query didn't included one heroe", 1, foundEmployees.size());

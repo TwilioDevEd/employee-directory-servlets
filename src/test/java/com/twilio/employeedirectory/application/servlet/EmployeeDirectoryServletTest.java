@@ -1,9 +1,9 @@
 package com.twilio.employeedirectory.application.servlet;
 
+import com.twilio.employeedirectory.domain.model.Employee;
 import com.twilio.employeedirectory.domain.query.EmployeeMatch;
 import com.twilio.employeedirectory.domain.query.MultipleMatch;
 import com.twilio.employeedirectory.domain.query.PerfectMatch;
-import com.twilio.employeedirectory.domain.model.Employee;
 import com.twilio.employeedirectory.domain.service.EmployeeDirectoryService;
 import com.twilio.sdk.verbs.TwiMLException;
 import org.junit.Test;
@@ -15,11 +15,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Optional;
 
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.refEq;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class EmployeeDirectoryServletTest {
 
@@ -32,9 +34,11 @@ public class EmployeeDirectoryServletTest {
     foundEmployee.setId(1L);
     EmployeeMatch expectedMatch = new PerfectMatch(foundEmployee);
 
-    when(employeeService.queryEmployee("Spider", Collections.emptyList())).thenReturn(expectedMatch);
+    when(employeeService.queryEmployee("Spider", Collections.emptyList()))
+        .thenReturn(expectedMatch);
 
-    EmployeeDirectoryServlet employeeDirectoryServlet = new EmployeeDirectoryServlet(employeeService);
+    EmployeeDirectoryServlet employeeDirectoryServlet =
+        new EmployeeDirectoryServlet(employeeService);
     HttpServletResponse response = mock(HttpServletResponse.class);
     PrintWriter printWriter = mock(PrintWriter.class);
     when(response.getWriter()).thenReturn(printWriter);
@@ -46,28 +50,29 @@ public class EmployeeDirectoryServletTest {
   }
 
   @Test
-  public void shouldSetACookieWithEmployeesForMultiplePartialMatch() throws IOException
-  {
-      EmployeeDirectoryService employeeService = mock(EmployeeDirectoryService.class);
-      Employee firstEmployee =
-              new Employee("Spider-Man", "spider-man@heroes.example.com", "+14155559610",
-                      "http://i.annihil.us/u/prod/marvel/i/mg/3/50/526548a343e4b.jpg");
-      firstEmployee.setId(12L);
-      Employee secondEmployee = new Employee("Iron Man", "ironMan@heroes.example.com", "+14155559368",
-              "http://i.annihil.us/u/prod/marvel/i/mg/9/c0/527bb7b37ff55.jpg");
-      secondEmployee.setId(21L);
-      when(employeeService.queryEmployee("Man", Collections.emptyList()))
-              .thenReturn(new MultipleMatch(Arrays.asList(firstEmployee,
-                      secondEmployee)));
+  public void shouldSetACookieWithEmployeesForMultiplePartialMatch() throws IOException {
+    EmployeeDirectoryService employeeService = mock(EmployeeDirectoryService.class);
+    Employee firstEmployee =
+        new Employee("Spider-Man", "spider-man@heroes.example.com", "+14155559610",
+            "http://i.annihil.us/u/prod/marvel/i/mg/3/50/526548a343e4b.jpg");
+    firstEmployee.setId(12L);
+    Employee secondEmployee =
+        new Employee("Iron Man", "ironMan@heroes.example.com", "+14155559368",
+            "http://i.annihil.us/u/prod/marvel/i/mg/9/c0/527bb7b37ff55.jpg");
+    secondEmployee.setId(21L);
+    when(employeeService.queryEmployee("Man", Collections.emptyList())).thenReturn(
+        new MultipleMatch(Arrays.asList(firstEmployee, secondEmployee)));
 
-      EmployeeDirectoryServlet employeeDirectoryServlet = new EmployeeDirectoryServlet(employeeService);
-      HttpServletResponse response = mock(HttpServletResponse.class);
-      HttpServletRequest request = mock(HttpServletRequest.class);
-      when(request.getParameter(anyString())).thenReturn("Man");
-      PrintWriter printWriter = mock(PrintWriter.class);
-      when(response.getWriter()).thenReturn(printWriter);
-      employeeDirectoryServlet.doPost(request, response);
-      verify(response, times(1)).addCookie(refEq(new Cookie(EmployeeDirectoryServlet.SUGGESTIONS_COOKIE_NAME, "1=12&2=21")));
+    EmployeeDirectoryServlet employeeDirectoryServlet =
+        new EmployeeDirectoryServlet(employeeService);
+    HttpServletResponse response = mock(HttpServletResponse.class);
+    HttpServletRequest request = mock(HttpServletRequest.class);
+    when(request.getParameter(anyString())).thenReturn("Man");
+    PrintWriter printWriter = mock(PrintWriter.class);
+    when(response.getWriter()).thenReturn(printWriter);
+    employeeDirectoryServlet.doPost(request, response);
+    verify(response, times(1)).addCookie(
+        refEq(new Cookie(EmployeeDirectoryServlet.SUGGESTIONS_COOKIE_NAME, "1=12&2=21")));
   }
 
 }

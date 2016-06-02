@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 /**
- * When the response returns multiple results which are not perfect match of the queried name
+ * When the response returns multiple results which are not perfect match of the
+ * queried name
  */
 public class MultipleMatch implements EmployeeMatch {
 
@@ -35,8 +36,9 @@ public class MultipleMatch implements EmployeeMatch {
   }
 
   /**
-   * Returns a url query string with indexed suggestions of {@link EmployeeMatch}
-   * 
+   * Returns a url query string with indexed suggestions of
+   * {@link EmployeeMatch}
+   *
    * @return {@link String} not <code>null</code>
    */
   public String getEmployeeSuggestions() {

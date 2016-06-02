@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Handle {@link Employee}
+ * Handle {@link Employee} entities in the database
  */
 public class EmployeeRepository {
 
@@ -50,7 +50,7 @@ public class EmployeeRepository {
   /**
    * Retrieve all available employees
    *
-   * @return A {@,link List<Employee>} not <code>null</code>
+   * @return A {@link List<Employee>} not <code>null</code>
    */
   public List<Employee> getAll() {
     CriteriaQuery<Employee> query = criteriaBuilder.createQuery(Employee.class);
@@ -94,7 +94,8 @@ public class EmployeeRepository {
    * Gets a {@link Employee} by its <code>id</code>
    *
    * @param id The {@link Employee#id} property value
-   * @return An {@link Optional} with the {@link Employee} found or {@link Optional#empty()}
+   * @return An {@link Optional} with the {@link Employee} found or
+   *         {@link Optional#empty()}
    */
   public Optional<Employee> findEmployeeById(Long id) {
     return Optional.ofNullable(entityManager.find(Employee.class, id));

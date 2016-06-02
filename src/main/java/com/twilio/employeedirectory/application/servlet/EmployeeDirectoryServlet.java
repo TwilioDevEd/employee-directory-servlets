@@ -38,10 +38,10 @@ public class EmployeeDirectoryServlet extends HttpServlet {
             queryValue -> createEmployeeMatchFromRequest(request, response, queryValue)).orElse(
             new NoMatch());
     request.setAttribute("employeeMatch", matchResponse);
-    returnMatch(response, matchResponse);
+    printMatch(response, matchResponse);
   }
 
-  private void returnMatch(HttpServletResponse response, EmployeeMatch matchResponse)
+  private void printMatch(HttpServletResponse response, EmployeeMatch matchResponse)
       throws IOException {
     try {
       // Only MultiplePartialMatch caches its response in a cookie
@@ -64,8 +64,8 @@ public class EmployeeDirectoryServlet extends HttpServlet {
 
   private EmployeeMatch createEmployeeMatchFromRequest(HttpServletRequest request,
       HttpServletResponse response, String queryValue) {
-    List<NameValuePair> optionsOfEmployees =
+    List<NameValuePair> employeeSuggestions =
         Utils.getCookieAndDispose(response, SUGGESTIONS_COOKIE_NAME, request.getCookies());
-    return employeeDirectoryService.queryEmployee(queryValue, optionsOfEmployees);
+    return employeeDirectoryService.queryEmployee(queryValue, employeeSuggestions);
   }
 }
