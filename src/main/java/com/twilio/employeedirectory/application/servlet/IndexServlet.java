@@ -32,18 +32,15 @@ public class IndexServlet extends HttpServlet {
 
   private static final String JSON_PATH = "seed-data.json";
 
-  private EmployeeRepository repository;
+  private final EmployeeRepository repository;
 
-  private EmployeeDirectoryService employeeService;
+  private final EmployeeDirectoryService employeeService;
 
   @Inject
-  public IndexServlet(EmployeeRepository repository, EmployeeDirectoryService employeeService) {
+  public IndexServlet(final EmployeeRepository repository,
+      final EmployeeDirectoryService employeeService) {
     this.repository = repository;
     this.employeeService = employeeService;
-  }
-
-  public IndexServlet(EmployeeRepository employeeRepository) {
-
   }
 
   @Override
@@ -85,11 +82,11 @@ public class IndexServlet extends HttpServlet {
   private URI getResourceURI() {
     Optional<URL> url =
         Optional.ofNullable(this.getClass().getResource(File.separator + JSON_PATH));
-    return url.map((URL u) -> {
+    return url.map(u -> {
       try {
         return u.toURI();
       } catch (Exception e) {
-        throw new RuntimeException(e);
+        throw new EmployeeLoadException(e);
       }
     }).orElseThrow(
         () -> new EmployeeLoadException(String.format("Not possible to retrieve resource: %s",

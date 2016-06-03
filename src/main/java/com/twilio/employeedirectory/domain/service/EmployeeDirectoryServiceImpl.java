@@ -29,10 +29,10 @@ public class EmployeeDirectoryServiceImpl implements EmployeeDirectoryService {
   }
 
   @Override
-  public EmployeeMatch queryEmployee(String fullName, Optional<List<NameValuePair>> lastQuery) {
+  public EmployeeMatch queryEmployee(String fullName, List<NameValuePair> lastQuery) {
     Optional<Employee> requestedEmployee = getRequestedEmployee(fullName, lastQuery);
-    List<Employee> matchedEmployees = requestedEmployee.map(Arrays::asList)
-            .orElse(repository.findEmployeeByFullName(fullName));
+    List<Employee> matchedEmployees =
+        requestedEmployee.map(Arrays::asList).orElse(repository.findEmployeeByFullName(fullName));
     return createEmployeeMatch(matchedEmployees);
   }
 
@@ -40,7 +40,8 @@ public class EmployeeDirectoryServiceImpl implements EmployeeDirectoryService {
    * Creates an {@link EmployeeMatch} base on the employees found
    *
    * @param foundEmployees A List of {@link Employee}
-   * @return An {@link EmployeeMatch} indicating a particular type of result, not <code>null</code>
+   * @return An {@link EmployeeMatch} indicating a particular type of result,
+   *         not <code>null</code>
    */
   protected EmployeeMatch createEmployeeMatch(List<Employee> foundEmployees) {
     final EmployeeMatch response;
@@ -61,24 +62,29 @@ public class EmployeeDirectoryServiceImpl implements EmployeeDirectoryService {
    * Detects if an {@link Employee} was requested and returns it
    *
    * @param optionIndex The option index (1,2..) in an input {@link String}
-   * @param availableOptions A possible list of {@link NameValuePair} with the <code>id</code> of
-   *        the employee in every {@link NameValuePair#getValue()}
+   * @param availableOptions A possible list of {@link NameValuePair} with the
+   *        <code>id</code> of the employee in every
+   *        {@link NameValuePair#getValue()}
    * @return an {@link Optional} with the {@link Employee} correspondant to the
    *         <code>optionIndex</code>
    */
-  protected Optional<Employee> getRequestedEmployee(String optionIndex,
-      Optional<List<NameValuePair>> availableOptions) {
-    if (availableOptions.isPresent()) {
-      Optional<NameValuePair> choosenOption =
-          availableOptions.get().stream().filter(pair -> pair.getName().equals(optionIndex))
-              .findFirst();
-      if (choosenOption.isPresent()) {
-        Optional<Long> selectedId = Utils.getOptionalLong(choosenOption.get().getValue());
-        if (selectedId.isPresent()) {
-          return repository.findEmployeeById(selectedId.get());
-        }
-      }
-    }
-    return Optional.empty();
+  private Optional<Employee> getRequestedEmployee(String optionIndex,
+      List<NameValuePair> availableOptions) {
+    return availableOptions.stream().filter(pair -> pair.getName().equals(optionIndex)).findFirst()
+        .flatMap(this::getEmployeeFromOption);
+  }
+
+  /**
+   * Given some option returns the correspondant {@link Employee}
+   *
+   * @param choosenOption an {@link Optional} of {@link NameValuePair} linking
+   *        the chosen option index with the wanted {@link Employee#id}
+   * @return an {@code Optional with the {@link Employee} found, not
+   *         <code>null</code>
+   */
+
+  private Optional<Employee> getEmployeeFromOption(NameValuePair choosenOption) {
+    return Utils.getOptionalLong(choosenOption.getValue()).flatMap(
+        id -> repository.findEmployeeById(id));
   }
 }

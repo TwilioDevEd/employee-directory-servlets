@@ -22,15 +22,15 @@ public class Employee {
   private String phoneNumber;
 
   @JsonProperty("imageurl")
-  private String ImageUrl;
+  private String imageUrl;
 
-  private Employee() { /* needed by the ORM */}
+  private Employee() { }
 
   public Employee(String fullName, String email, String phoneNumber, String imageUrl) {
     this.fullName = fullName;
     this.email = email;
     this.phoneNumber = phoneNumber;
-    ImageUrl = imageUrl;
+    this.imageUrl = imageUrl;
   }
 
   public Long getId() {
@@ -66,11 +66,11 @@ public class Employee {
   }
 
   public String getImageUrl() {
-    return ImageUrl;
+    return imageUrl;
   }
 
   public void setImageUrl(String imageUrl) {
-    ImageUrl = imageUrl;
+    this.imageUrl = imageUrl;
   }
 
   @Override

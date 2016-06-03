@@ -9,28 +9,31 @@ import com.twilio.sdk.verbs.TwiMLResponse;
  */
 public interface EmployeeMatch {
 
-    /**
-     * Gets a verbose message to return to the user
-     * @return {@link String} not <code>null</code>
-     */
-    public String getMessage();
+  /**
+   * Gets a verbose message to return to the user
+   *
+   * @return {@link String} not <code>null</code>
+   */
+  String getMessage();
 
-    /**
-     * Gets the message in Twiml format
-     * @return {@link String} not <code>null</code>
-     */
-    public default String getMessageTwiml() throws TwiMLException
-    {
-        TwiMLResponse twiMLResponse = new TwiMLResponse();
-        twiMLResponse.append(new Message(getMessage()));
-        return twiMLResponse.toEscapedXML();
-    }
+  /**
+   * Gets the message in Twiml format
+   *
+   * @return {@link String} not <code>null</code>
+   */
+  default String getMessageTwiml() throws TwiMLException {
+    TwiMLResponse twiMLResponse = new TwiMLResponse();
+    twiMLResponse.append(new Message(getMessage()));
+    return twiMLResponse.toEscapedXML();
+  }
 
-    /**
-     * Indicates if the Match returned a unique Employee. So some function <code>getFoundEmployee</code> may be used.
-     * @return true|false if There is some unique response.
-     */
-    public default boolean isSingleEmployeeFound() {
-        return false;
-    }
+  /**
+   * Indicates if the Match returned a unique Employee. So some function
+   * <code>getFoundEmployee</code> may be used.
+   *
+   * @return true|false if There is some unique response.
+   */
+  default boolean isSingleEmployeeFound() {
+    return false;
+  }
 }

@@ -1,11 +1,15 @@
 package com.twilio.employeedirectory.domain.query;
 
 import com.twilio.employeedirectory.domain.model.Employee;
-import com.twilio.sdk.verbs.*;
+import com.twilio.sdk.verbs.Body;
+import com.twilio.sdk.verbs.Media;
+import com.twilio.sdk.verbs.Message;
+import com.twilio.sdk.verbs.TwiMLException;
+import com.twilio.sdk.verbs.TwiMLResponse;
 
 /**
- * When it returns an {@link com.twilio.employeedirectory.domain.model.Employee} which name is
- * exactly the one queried.
+ * When it returns an {@link com.twilio.employeedirectory.domain.model.Employee}
+ * which name is exactly the one queried.
  */
 public class PerfectMatch implements EmployeeMatch {
 

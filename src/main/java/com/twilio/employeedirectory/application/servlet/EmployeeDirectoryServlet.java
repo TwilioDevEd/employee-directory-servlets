@@ -24,35 +24,48 @@ public class EmployeeDirectoryServlet extends HttpServlet {
 
   public static final String SUGGESTIONS_COOKIE_NAME = "last-query";
 
-  private EmployeeDirectoryService employeeDirectoryService;
+  private final EmployeeDirectoryService employeeDirectoryService;
 
   @Inject
-  public EmployeeDirectoryServlet(EmployeeDirectoryService employeeDirectoryService) {
+  public EmployeeDirectoryServlet(final EmployeeDirectoryService employeeDirectoryService) {
     this.employeeDirectoryService = employeeDirectoryService;
   }
 
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Optional<String> fullNameQuery = Optional.ofNullable(request.getParameter(Twilio.QUERY_PARAM));
-    final EmployeeMatch matchResponse =
+    EmployeeMatch matchResponse =
         fullNameQuery.map(
-            queryValue -> {
-              Optional<List<NameValuePair>> optionsOfEmployees =
-                  Utils.getCookieAndDispose(request, response, SUGGESTIONS_COOKIE_NAME);
-              return employeeDirectoryService.queryEmployee(queryValue, optionsOfEmployees);
-            }).orElse(new NoMatch());
+            queryValue -> createEmployeeMatchFromRequest(request, response, queryValue)).orElse(
+            new NoMatch());
     request.setAttribute("employeeMatch", matchResponse);
+    printMatch(response, matchResponse);
+  }
+
+  private void printMatch(HttpServletResponse response, EmployeeMatch matchResponse)
+      throws IOException {
     try {
-      // Only MultipleMatch caches its response in a cookie
+      // Only MultiplePartialMatch caches its response in a cookie
       if (matchResponse instanceof MultipleMatch) {
-        Cookie suggestionsCookie =
-            new Cookie(SUGGESTIONS_COOKIE_NAME,
-                ((MultipleMatch) matchResponse).getEmployeeSuggestions());
-        response.addCookie(suggestionsCookie);
+        saveEmployeeSuggestionsIntoCookie((MultipleMatch) matchResponse, response);
       }
       response.setContentType("text/xml");
       response.getWriter().print(matchResponse.getMessageTwiml());
     } catch (TwiMLException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  private void saveEmployeeSuggestionsIntoCookie(MultipleMatch matchResponse,
+      HttpServletResponse response) {
+    Cookie lastQueryCookie =
+        new Cookie(SUGGESTIONS_COOKIE_NAME, matchResponse.getEmployeeSuggestions());
+    response.addCookie(lastQueryCookie);
+  }
+
+  private EmployeeMatch createEmployeeMatchFromRequest(HttpServletRequest request,
+      HttpServletResponse response, String queryValue) {
+    List<NameValuePair> employeeSuggestions =
+        Utils.getCookieAndDispose(response, SUGGESTIONS_COOKIE_NAME, request.getCookies());
+    return employeeDirectoryService.queryEmployee(queryValue, employeeSuggestions);
   }
 }

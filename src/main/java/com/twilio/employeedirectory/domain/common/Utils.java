@@ -4,19 +4,20 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Complementary functions
  */
-public class Utils {
+public final class Utils {
 
-  private Utils() {}
+  private Utils() { }
 
   /**
    * Returns an Long from the string or returns {@link Optional#empty()}
@@ -33,34 +34,36 @@ public class Utils {
   }
 
   /**
-   * Converts a cookie specified by its name to some list of {@link NameValuePair} and removes from
-   * the browser.
+   * Converts a cookie specified by its name to some list of
+   * {@link NameValuePair} and removes from the browser.
    *
-   * @param request The request with the cookies
    * @param response The response used to indicate the deleted cookies
    * @param cookieName Name of the cookie
+   * @param cookies
    * @return Optional of {@link List<NameValuePair>} not <code>null</code>
    */
-  public static Optional<List<NameValuePair>> getCookieAndDispose(HttpServletRequest request,
-      HttpServletResponse response, String cookieName) {
-    Optional<Cookie[]> cookies = Optional.ofNullable(request.getCookies());
-    if (cookies.isPresent()) {
-      return Arrays.stream(cookies.get()).filter(c -> cookieName.equals(c.getName())).findFirst()
-          .map(c -> Utils.createOptionsAndDisposeCookie(c, response)).filter(l -> !l.isEmpty());
+  public static List<NameValuePair> getCookieAndDispose(HttpServletResponse response,
+      String cookieName, Cookie[] cookies) {
+    if (cookies != null) {
+      Stream<Cookie> filteredByName =
+          Arrays.stream(cookies).filter(c -> cookieName.equals(c.getName()));
+      Optional<Cookie> firstCookie = filteredByName.findFirst();
+      return firstCookie.map(c -> Utils.createOptionsAndDisposeCookie(c, response)).orElse(
+          Collections.emptyList());
     } else {
-      return Optional.empty();
+      return Collections.emptyList();
     }
   }
 
   /**
    * Convert a cookie to some {@link NameValuePair} list and removes it
-   * 
+   *
    * @param cookie Instance of cookie not <code>null</code>
    * @param response The response used to indicate the deleted cookies
    * @return {@link List<NameValuePair>} not <code>null</code>
    */
   public static List<NameValuePair> createOptionsAndDisposeCookie(Cookie cookie,
-                                                                  HttpServletResponse response) {
+      HttpServletResponse response) {
     String currentValue = cookie.getValue();
     cookie.setMaxAge(0);
     cookie.setValue("");
