@@ -1,7 +1,9 @@
 .chapter(data-title='Employee Directory Servlet')
   .step(
     data-title='What Are We Building?',
-    data-file='src/main/webapp/index.jsp')
+    data-file='src/main/webapp/index.jsp',
+    data-highlight='27-35'
+    )
     :markdown
       ## Employee Directory
 
@@ -11,7 +13,7 @@
 
       Here is how it works at a high level:
 
-      - The user sends a SMS with an Employee's name to the Twilio number.
+      - The user sends an SMS with an Employee's name to the Twilio number.
       - The user receives information for the requested Employee.
 
       Let's get started!
@@ -24,7 +26,8 @@
   .step(
     data-title="Handling Twilio's SMS Request",
     data-file='src/main/java/com/twilio/employeedirectory/application/servlet/EmployeeDirectoryServlet.java',
-    data-highlight='34-58')
+    data-highlight='34-42'
+    )
     :markdown
       ## Handling Twilio's SMS Request
 
@@ -45,7 +48,8 @@
   .step(
     data-title="Exact Match",
     data-file='src/main/java/com/twilio/employeedirectory/domain/query/PerfectMatch.java',
-    data-highlight='6-42')
+    data-highlight='10-46'
+    )
     :markdown
       ## Finding an Exact Employee Match
 
@@ -68,8 +72,9 @@
       ## Finding Multiple Employee Matches
 
       Now we'll try to get a partial match that returns more than one result. We need to
-      store a List of `BasicNameValuePair` containing index suggestions so that the user can reply with a number
-      that references one of the suggestions in order to get all the employee's information.
+      store a List of `BasicNameValuePair` containing indexed suggestions so
+      the user can reply with a number that references one of the suggestions
+      in order to get all the employee's information.
       We'll use [Twilio Cookies](https://www.twilio.com/blog/2014/07/the-definitive-guide-to-sms-conversation-tracking.html) to store the suggestions.
 
       **See Also:**
@@ -97,7 +102,7 @@
   .step(
     data-title="Storing Suggestions With Cookies",
     data-file='src/main/java/com/twilio/employeedirectory/application/servlet/EmployeeDirectoryServlet.java',
-    data-highlight='45-51')
+    data-highlight='44-63')
     :markdown
       ## Storing Suggestions With Cookies
 
