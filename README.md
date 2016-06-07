@@ -96,7 +96,7 @@ Each time the applications loads the `IndexServlet#init` function will create a 
    ```
 1. If your query matches only one employee, he/she will be returned immediately. Eg.: "Spider" will return in the web version:
 
- ![Query an employee partially](https://s3.amazonaws.com/com.twilio.prod.twilio-docs/images/employee-directory-lookup.original.png)
+ ![Query an employee partially](http://howtodocs.s3.amazonaws.com/employee-directory-lookup.png)
 
 ## Meta
 
