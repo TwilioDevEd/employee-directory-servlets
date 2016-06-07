@@ -2,11 +2,14 @@
 
 footer {
     bottom: 10px;
-    text-align: center;
 }
 
 footer i {
     color:#ff0000;
+}
+
+footer p{
+    text-align: center;
 }
 
 .body-content {
