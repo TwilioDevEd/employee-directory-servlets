@@ -15,18 +15,15 @@
 <body>
 <div class="container">
     <div class="page-header">
-        <h1>Employee Directory App</h1>
+        <h1>Employee Directory</h1>
     </div>
-    <c:if test="${firstEmployee.present}">
-        <div>
-        <label>First Employee:</label>
-        <span><c:out value="${firstEmployee.get().fullName}"/></span>
-        </div>
-    </c:if>
     <div>
         <form method="post">
-            <input type="text" required name="<c:out value="${query_param}"/>" placeholder="query some superheroe" value="<c:out value="${query}"/>"/>
-            <input type="submit" name="submit" value="Send"/>
+            <input type="text" required name="<c:out
+            value="${query_param}"/>" placeholder="Search your superheroe"
+            value="<c:out value="${query}"/>"/>
+            <input type="submit" name="submit" value="Send" class="btn
+            btn-primary"/>
             <c:if test="${employeeMatch != null}">
                 <p class="response">
                     <c:out value="${employeeMatch.message}"/>

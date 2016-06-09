@@ -2,6 +2,7 @@ package com.twilio.employeedirectory.application.servlet;
 
 import com.twilio.employeedirectory.domain.common.Twilio;
 import com.twilio.employeedirectory.domain.common.Utils;
+import com.twilio.employeedirectory.domain.error.EmployeeLoadException;
 import com.twilio.employeedirectory.domain.query.EmployeeMatch;
 import com.twilio.employeedirectory.domain.query.MultipleMatch;
 import com.twilio.employeedirectory.domain.query.NoMatch;
@@ -18,12 +19,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Singleton
 public class EmployeeDirectoryServlet extends HttpServlet {
 
   public static final String SUGGESTIONS_COOKIE_NAME = "last-query";
-
+  private static final Logger LOG = Logger.getLogger(EmployeeDirectoryServlet.class.getName());
   private final EmployeeDirectoryService employeeDirectoryService;
 
   @Inject
@@ -33,16 +36,19 @@ public class EmployeeDirectoryServlet extends HttpServlet {
 
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Optional<String> fullNameQuery = Optional.ofNullable(request.getParameter(Twilio.QUERY_PARAM));
-    EmployeeMatch matchResponse =
-        fullNameQuery.map(
-            queryValue -> createEmployeeMatchFromRequest(request, response, queryValue)).orElse(
-            new NoMatch());
-    request.setAttribute("employeeMatch", matchResponse);
-    printMatch(response, matchResponse);
+    try {
+      EmployeeMatch matchResponse =
+          fullNameQuery.map(
+              queryValue -> createEmployeeMatchFromRequest(request, response, queryValue)).orElse(
+              new NoMatch());
+      request.setAttribute("employeeMatch", matchResponse);
+      printMatch(response, matchResponse);
+    } catch (EmployeeLoadException ex) {
+      printError(response, ex.getMessage());
+    }
   }
 
-  private void printMatch(HttpServletResponse response, EmployeeMatch matchResponse)
-      throws IOException {
+  private void printMatch(HttpServletResponse response, EmployeeMatch matchResponse) {
     try {
       // Only MultiplePartialMatch caches its response in a cookie
       if (matchResponse instanceof MultipleMatch) {
@@ -51,7 +57,9 @@ public class EmployeeDirectoryServlet extends HttpServlet {
       response.setContentType("text/xml");
       response.getWriter().print(matchResponse.getMessageTwiml());
     } catch (TwiMLException e) {
-      throw new RuntimeException(e);
+      throw new EmployeeLoadException("Invalid TwiML response");
+    } catch (IOException e) {
+      throw new EmployeeLoadException("Error writing response in the server");
     }
   }
 
@@ -67,5 +75,14 @@ public class EmployeeDirectoryServlet extends HttpServlet {
     List<NameValuePair> employeeSuggestions =
         Utils.getCookieAndDispose(response, SUGGESTIONS_COOKIE_NAME, request.getCookies());
     return employeeDirectoryService.queryEmployee(queryValue, employeeSuggestions);
+  }
+
+  private void printError(HttpServletResponse response, String message) {
+    try {
+      response.getWriter().print("<h1>Error unexpected in the server</h1>");
+      response.getWriter().print(String.format("<p>%s</p>", message));
+    } catch (IOException e) {
+      LOG.log(Level.SEVERE, "Error trying to print message in the servlet");
+    }
   }
 }
