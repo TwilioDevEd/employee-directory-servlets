@@ -37,3 +37,7 @@ footer p{
     transition-duration: 3s, 5s, 3s, 5s;
     margin: 0px auto;
 }
+
+.body-content{
+  margin: 1em auto 2em;
+}
