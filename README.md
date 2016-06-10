@@ -1,8 +1,8 @@
-# Employee Directory on Servlets
-
 <a href="https://www.twilio.com">
   <img src="https://static0.twilio.com/marketing/bundles/marketing/img/logos/wordmark-red.svg" alt="Twilio" width="250" />
 </a>
+
+# Employee Directory with Servlets
 
 [![Build Status](https://travis-ci.org/TwilioDevEd/employee-directory-servlets.svg?branch=master)](https://travis-ci.org/TwilioDevEd/employee-directory-servlets)
 
@@ -25,7 +25,7 @@ mobile phone user can send a text message with a partial string of the person's 
 
 1. Edit the sample configuration file `.env.example` and edit it to match your configuration.
 
-   You can use the `.env.example` in a unix based operating system with the `source` command to load the variables into your environment:
+   You can use the `.env.example` in a unix based operative system with the `source` command to load the variables into your environment:
 
    ```bash
    $ source .env.example
