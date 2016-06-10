@@ -7,7 +7,9 @@ import com.twilio.employeedirectory.domain.query.EmployeeMatch;
 import com.twilio.employeedirectory.domain.query.MultipleMatch;
 import com.twilio.employeedirectory.domain.query.NoMatch;
 import com.twilio.employeedirectory.domain.service.EmployeeDirectoryService;
+import com.twilio.sdk.verbs.Message;
 import com.twilio.sdk.verbs.TwiMLException;
+import com.twilio.sdk.verbs.TwiMLResponse;
 import org.apache.http.NameValuePair;
 
 import javax.inject.Inject;
@@ -25,8 +27,10 @@ import java.util.logging.Logger;
 @Singleton
 public class EmployeeDirectoryServlet extends HttpServlet {
 
-  public static final String SUGGESTIONS_COOKIE_NAME = "last-query";
   private static final Logger LOG = Logger.getLogger(EmployeeDirectoryServlet.class.getName());
+
+  public static final String SUGGESTIONS_COOKIE_NAME = "last-query";
+
   private final EmployeeDirectoryService employeeDirectoryService;
 
   @Inject
@@ -38,14 +42,29 @@ public class EmployeeDirectoryServlet extends HttpServlet {
     Optional<String> fullNameQuery = Optional.ofNullable(request.getParameter(Twilio.QUERY_PARAM));
     try {
       EmployeeMatch matchResponse =
-          fullNameQuery.map(
-              queryValue -> createEmployeeMatchFromRequest(request, response, queryValue)).orElse(
-              new NoMatch());
+          fullNameQuery
+            .map(queryValue -> createEmployeeMatchFromRequest(request, response, queryValue))
+            .orElse(new NoMatch());
       request.setAttribute("employeeMatch", matchResponse);
       printMatch(response, matchResponse);
     } catch (EmployeeLoadException ex) {
       printError(response, ex.getMessage());
     }
+  }
+
+  private void saveEmployeeSuggestionsIntoCookie(MultipleMatch matchResponse,
+                                                 HttpServletResponse response) {
+    Cookie lastQueryCookie =
+      new Cookie(SUGGESTIONS_COOKIE_NAME, matchResponse.getEmployeeSuggestions());
+    response.addCookie(lastQueryCookie);
+  }
+
+  private EmployeeMatch createEmployeeMatchFromRequest(HttpServletRequest request,
+                                                       HttpServletResponse response,
+                                                       String queryValue) {
+    List<NameValuePair> employeeSuggestions =
+      Utils.getCookieAndDispose(response, SUGGESTIONS_COOKIE_NAME, request.getCookies());
+    return employeeDirectoryService.queryEmployee(queryValue, employeeSuggestions);
   }
 
   private void printMatch(HttpServletResponse response, EmployeeMatch matchResponse) {
@@ -63,26 +82,16 @@ public class EmployeeDirectoryServlet extends HttpServlet {
     }
   }
 
-  private void saveEmployeeSuggestionsIntoCookie(MultipleMatch matchResponse,
-      HttpServletResponse response) {
-    Cookie lastQueryCookie =
-        new Cookie(SUGGESTIONS_COOKIE_NAME, matchResponse.getEmployeeSuggestions());
-    response.addCookie(lastQueryCookie);
-  }
-
-  private EmployeeMatch createEmployeeMatchFromRequest(HttpServletRequest request,
-      HttpServletResponse response, String queryValue) {
-    List<NameValuePair> employeeSuggestions =
-        Utils.getCookieAndDispose(response, SUGGESTIONS_COOKIE_NAME, request.getCookies());
-    return employeeDirectoryService.queryEmployee(queryValue, employeeSuggestions);
-  }
-
   private void printError(HttpServletResponse response, String message) {
     try {
-      response.getWriter().print("<h1>Error unexpected in the server</h1>");
-      response.getWriter().print(String.format("<p>%s</p>", message));
+      response.setContentType("text/xml");
+      TwiMLResponse twiMLResponse = new TwiMLResponse();
+      twiMLResponse.append(new Message(message));
+      response.getWriter().print(twiMLResponse.toEscapedXML());
     } catch (IOException e) {
-      LOG.log(Level.SEVERE, "Error trying to print message in the servlet");
+      LOG.log(Level.SEVERE, "Error trying to print a text message in the servlet");
+    } catch (TwiMLException e) {
+      LOG.log(Level.SEVERE, "Error trying to print a TwiML message in the servlet");
     }
   }
 }

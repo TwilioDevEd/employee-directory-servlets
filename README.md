@@ -66,6 +66,8 @@ Once ngrok is running, open up your browser and go to your ngrok URL. It will lo
   http://<sub-domain>.ngrok.io/directory/search
   ```
 
+  The used method is **HTTP POST**.
+
   ![Configure SMS](http://howtodocs.s3.amazonaws.com/twilio-number-config-all-med.gif)
 
 That's it!
