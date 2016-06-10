@@ -19,7 +19,7 @@
     </section>
     <section class="body-content">
         <form method="post"  class="form-inline">
-            <input type="text" id="txt-search" required name="<c:out
+            <input type="text" id="search-input" required name="<c:out
             value="${query_param}"/>" placeholder="Search your superheroe"
             value="<c:out value="${query}"/>" class="form-control"/>
             <input type="submit" name="submit" value="Send" class="btn btn-primary"/>
