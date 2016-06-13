@@ -14,26 +14,22 @@
 </head>
 <body>
 <div class="container">
-    <div class="page-header">
-        <h1>Employee Directory App</h1>
-    </div>
-    <c:if test="${firstEmployee.present}">
-        <div>
-        <label>First Employee:</label>
-        <span><c:out value="${firstEmployee.get().fullName}"/></span>
-        </div>
-    </c:if>
-    <div>
-        <form method="post">
-            <input type="text" required name="<c:out value="${query_param}"/>" placeholder="query some superheroe" value="<c:out value="${query}"/>"/>
-            <input type="submit" name="submit" value="Send"/>
+    <section class="page-header">
+        <h1>Employee Directory</h1>
+    </section>
+    <section class="body-content">
+        <form method="post"  class="form-inline">
+            <input type="text" id="search-input" required name="<c:out
+            value="${query_param}"/>" placeholder="Search your superheroe"
+            value="<c:out value="${query}"/>" class="form-control"/>
+            <input type="submit" name="submit" value="Send" class="btn btn-primary"/>
             <c:if test="${employeeMatch != null}">
                 <p class="response">
                     <c:out value="${employeeMatch.message}"/>
                 </p>
             </c:if>
         </form>
-    </div>
+    </section>
 </div>
 <footer class="footer">
     <div class="container">

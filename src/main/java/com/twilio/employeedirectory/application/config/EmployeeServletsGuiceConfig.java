@@ -2,8 +2,7 @@ package com.twilio.employeedirectory.application.config;
 
 import com.google.inject.persist.PersistFilter;
 import com.google.inject.servlet.ServletModule;
-import com.twilio.employeedirectory.application.servlet
-        .EmployeeDirectoryServlet;
+import com.twilio.employeedirectory.application.servlet.EmployeeDirectoryServlet;
 import com.twilio.employeedirectory.application.servlet.IndexServlet;
 
 /**

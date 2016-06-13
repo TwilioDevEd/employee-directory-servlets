@@ -23,8 +23,31 @@ footer p{
    padding: 1em;
 }
 
-media, .media{
+.media{
     display: block;
     margin: 1em 0;
-    max-width: 100%;
+    max-width: 320px;
 }
+
+.media:active{
+    max-width: 100vw;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    max-height: 100vh;
+    transition-duration: 3s, 5s, 3s, 5s;
+    margin: 0px auto;
+}
+
+.body-content{
+  margin: 1em auto 2em;
+}
+
+
+@media (max-width: 768px) {
+
+  .body-content input.btn{
+    margin-top: 2em;
+  }
+}
+

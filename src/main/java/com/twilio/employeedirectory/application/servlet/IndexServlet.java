@@ -6,7 +6,6 @@ import com.twilio.employeedirectory.domain.common.Twilio;
 import com.twilio.employeedirectory.domain.error.EmployeeLoadException;
 import com.twilio.employeedirectory.domain.model.Employee;
 import com.twilio.employeedirectory.domain.repository.EmployeeRepository;
-import com.twilio.employeedirectory.domain.service.EmployeeDirectoryService;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.type.CollectionType;
 
@@ -23,6 +22,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Singleton
@@ -34,19 +34,14 @@ public class IndexServlet extends HttpServlet {
 
   private final EmployeeRepository repository;
 
-  private final EmployeeDirectoryService employeeService;
-
   @Inject
-  public IndexServlet(final EmployeeRepository repository,
-      final EmployeeDirectoryService employeeService) {
+  public IndexServlet(final EmployeeRepository repository) {
     this.repository = repository;
-    this.employeeService = employeeService;
   }
 
   @Override
   public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
       IOException {
-    req.setAttribute("firstEmployee", repository.findFirstEmployee());
     req.setAttribute(Twilio.QUERY_PARAM, "");
     req.getRequestDispatcher("index.jsp").forward(req, resp);
   }
@@ -55,7 +50,6 @@ public class IndexServlet extends HttpServlet {
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
       IOException {
     Optional<String> fullNameQuery = Optional.ofNullable(req.getParameter(Twilio.QUERY_PARAM));
-    req.setAttribute("firstEmployee", Optional.empty());
     req.setAttribute(Twilio.QUERY_PARAM, fullNameQuery.orElse(""));
     req.getRequestDispatcher("directory/search").forward(req, resp);
   }
@@ -74,8 +68,8 @@ public class IndexServlet extends HttpServlet {
           objectMapper.getTypeFactory().constructCollectionType(List.class, Employee.class);
       List<Employee> employees = objectMapper.readValue(employeeJsonFile, collectionType);
       repository.addAll(employees);
-    } catch (Exception e) {
-      throw new EmployeeLoadException(e);
+    } catch (Exception ex) {
+      LOG.log(Level.SEVERE, "The database could not be seeded: " + ex.getMessage());
     }
   }
 

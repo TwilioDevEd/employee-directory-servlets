@@ -47,8 +47,8 @@ public final class Utils {
     if (cookies != null) {
       Stream<Cookie> filteredByName =
           Arrays.stream(cookies).filter(c -> cookieName.equals(c.getName()));
-      Optional<Cookie> firstCookie = filteredByName.findFirst();
-      return firstCookie.map(c -> Utils.createOptionsAndDisposeCookie(c, response)).orElse(
+      Optional<Cookie> wantedCookie = filteredByName.findFirst();
+      return wantedCookie.map(c -> Utils.createOptionsAndDisposeCookie(c, response)).orElse(
           Collections.emptyList());
     } else {
       return Collections.emptyList();
@@ -65,9 +65,8 @@ public final class Utils {
   public static List<NameValuePair> createOptionsAndDisposeCookie(Cookie cookie,
       HttpServletResponse response) {
     String currentValue = cookie.getValue();
-    cookie.setMaxAge(0);
+    cookie.setMaxAge(-1);
     cookie.setValue("");
-    cookie.setPath("/");
     response.addCookie(cookie);
     return URLEncodedUtils.parse(currentValue, StandardCharsets.US_ASCII);
   }
