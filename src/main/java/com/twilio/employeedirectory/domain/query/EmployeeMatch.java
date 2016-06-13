@@ -20,6 +20,7 @@ public interface EmployeeMatch {
    * Gets the message in Twiml format
    *
    * @return {@link String} not <code>null</code>
+   * @throws TwiMLException in case of invalid TwiML Verb
    */
   default String getMessageTwiml() throws TwiMLException {
     TwiMLResponse twiMLResponse = new TwiMLResponse();
