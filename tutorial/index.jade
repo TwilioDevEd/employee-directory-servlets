@@ -1,11 +1,11 @@
-.chapter(data-title='Employee Directory Servlet')
+.chapter(data-title='Employee Directory Servlets')
   .step(
     data-title='What Are We Building?',
     data-file='src/main/webapp/index.jsp',
     data-highlight='27-35'
     )
     :markdown
-      ## Employee Directory
+      ## Employee Directory Servlets
 
       Learn how to implement an employee directory that you can query using SMS.
       Request information from anyone at your company just by sending a text message
@@ -41,23 +41,23 @@
       to send an SMS [Message](//www.twilio.com/docs/api/twiml/sms/message)
       back to the user.
 
-      Let's take a closer look to each one of the scenarios.
+      Let's take a closer look at each one of the scenarios.
 
       [TwiML]: //www.twilio.com/docs/api/twiml
 
   .step(
-    data-title="Exact Match",
+    data-title="Finding an Exact Match",
     data-file='src/main/java/com/twilio/employeedirectory/domain/query/PerfectMatch.java',
     data-highlight='10-46'
     )
     :markdown
-      ## Finding an Exact Employee Match
+      ## Finding an Exact Match
 
       This is the simplest scenario. We query our database expecting to find an
       employee whose name is whole or partially like the one specified in the SMS sent to our Twilio number. If a single match is found, a message containing
       this employee's information is built and sent back to Twilio as TwiML instructions.
 
-      Our next possible scenario is when more than one employee matches.
+      Our next possible scenario is when more than one employee matches the request.
 
       ---
 
@@ -65,11 +65,11 @@
       * [How we iterate over possible matching scenarios](//github.com/TwilioDevEd/employee-directory-servlets/blob/master/src/main/java/com/twilio/employeedirectory/domain/service/EmployeeDirectoryServiceImpl.java)
 
   .step(
-    data-title="Multiple Matches",
+    data-title="Finding Multiple Matches",
     data-file='src/main/java/com/twilio/employeedirectory/domain/query/MultipleMatch.java',
     data-highlight='12-57')
     :markdown
-      ## Finding Multiple Employee Matches
+      ## Finding Multiple Matches
 
       Now we'll try to get a partial match that returns more than one result. We need to
       store a List of `BasicNameValuePair` containing indexed suggestions so
@@ -82,11 +82,11 @@
       * [How we iterate over possible matching scenarios](//github.com/TwilioDevEd/employee-directory-servlets/blob/master/src/main/java/com/twilio/employeedirectory/domain/service/EmployeeDirectoryServiceImpl.java)
 
   .step(
-    data-title="No Match",
+    data-title="Not Finding a Match",
     data-file='src/main/java/com/twilio/employeedirectory/domain/query/NoMatch.java',
     data-highlight='3-11')
     :markdown
-      ## Finding No Employee Match
+      ## Not Finding a Match
 
       The last scenario is so simple that a step won't be created for it. If none
       of the previous scenarios occur, it means that there is no employee in the
@@ -106,8 +106,8 @@
     :markdown
       ## Storing Suggestions With Cookies
 
-      When a user gets a multiple match by searching the employee directory, we
-      reply with multiple indexed suggestions. We need to store this suggestions, so the
+      When a user gets a multiple match by searching the employee's directory, we
+      reply with multiple indexed suggestions. We need to store these suggestions, so
       next time the user sends an SMS we know this is not a query for a new employee,
       but a selection of one of the suggestions.
 
@@ -137,6 +137,6 @@
 
       ### Did this help?
 
-      Thanks for checking out this tutorial! If you have any feedback
+      Thanks for checking this tutorial out! If you have any feedback
       to share with us, we'd love to hear it.
       [Contact the Twilio Developer Education Team](mailto:deved-oss@twilio.com) to let us know what you think.
