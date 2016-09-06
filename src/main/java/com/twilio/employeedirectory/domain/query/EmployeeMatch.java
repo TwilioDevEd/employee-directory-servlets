@@ -1,8 +1,10 @@
 package com.twilio.employeedirectory.domain.query;
 
-import com.twilio.sdk.verbs.Message;
-import com.twilio.sdk.verbs.TwiMLException;
-import com.twilio.sdk.verbs.TwiMLResponse;
+import com.twilio.twiml.Body;
+import com.twilio.twiml.Message;
+import com.twilio.twiml.MessagingResponse;
+import com.twilio.twiml.TwiMLException;
+
 
 /**
  * Defines some response obtained from querying a person's name
@@ -23,9 +25,13 @@ public interface EmployeeMatch {
    * @throws TwiMLException in case of invalid TwiML Verb
    */
   default String getMessageTwiml() throws TwiMLException {
-    TwiMLResponse twiMLResponse = new TwiMLResponse();
-    twiMLResponse.append(new Message(getMessage()));
-    return twiMLResponse.toEscapedXML();
+    return new MessagingResponse.Builder()
+      .message(new Message.Builder()
+        .body(new Body(getMessage()))
+        .build()
+      )
+      .build()
+      .toXml();
   }
 
   /**

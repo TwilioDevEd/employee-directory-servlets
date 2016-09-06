@@ -7,9 +7,10 @@ import com.twilio.employeedirectory.domain.query.EmployeeMatch;
 import com.twilio.employeedirectory.domain.query.MultipleMatch;
 import com.twilio.employeedirectory.domain.query.NoMatch;
 import com.twilio.employeedirectory.domain.service.EmployeeDirectoryService;
-import com.twilio.sdk.verbs.Message;
-import com.twilio.sdk.verbs.TwiMLException;
-import com.twilio.sdk.verbs.TwiMLResponse;
+import com.twilio.twiml.Body;
+import com.twilio.twiml.Message;
+import com.twilio.twiml.MessagingResponse;
+import com.twilio.twiml.TwiMLException;
 import org.apache.http.NameValuePair;
 
 import javax.inject.Inject;
@@ -85,9 +86,12 @@ public class EmployeeDirectoryServlet extends HttpServlet {
   private void printError(HttpServletResponse response, String message) {
     try {
       response.setContentType("text/xml");
-      TwiMLResponse twiMLResponse = new TwiMLResponse();
-      twiMLResponse.append(new Message(message));
-      response.getWriter().print(twiMLResponse.toEscapedXML());
+      MessagingResponse messagingResponse = new MessagingResponse.Builder()
+        .message(new Message.Builder()
+          .body(new Body(message))
+          .build()
+        ).build();
+      response.getWriter().print(messagingResponse.toXml());
     } catch (IOException e) {
       LOG.log(Level.SEVERE, "Error trying to print a text message in the servlet");
     } catch (TwiMLException e) {
