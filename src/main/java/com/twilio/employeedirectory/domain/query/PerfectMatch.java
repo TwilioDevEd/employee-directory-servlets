@@ -1,11 +1,12 @@
 package com.twilio.employeedirectory.domain.query;
 
 import com.twilio.employeedirectory.domain.model.Employee;
-import com.twilio.sdk.verbs.Body;
-import com.twilio.sdk.verbs.Media;
-import com.twilio.sdk.verbs.Message;
-import com.twilio.sdk.verbs.TwiMLException;
-import com.twilio.sdk.verbs.TwiMLResponse;
+import com.twilio.twiml.Body;
+import com.twilio.twiml.Media;
+import com.twilio.twiml.Message;
+import com.twilio.twiml.MessagingResponse;
+import com.twilio.twiml.TwiMLException;
+
 
 /**
  * When it returns an {@link com.twilio.employeedirectory.domain.model.Employee}
@@ -27,12 +28,14 @@ public class PerfectMatch implements EmployeeMatch {
 
   @Override
   public String getMessageTwiml() throws TwiMLException {
-    TwiMLResponse twiMLResponse = new TwiMLResponse();
-    Message message = new Message();
-    message.append(new Body(getMessage()));
-    message.append(new Media(foundEmployee.getImageUrl()));
-    twiMLResponse.append(message);
-    return twiMLResponse.toEscapedXML();
+    return new MessagingResponse.Builder()
+      .message(new Message.Builder()
+        .body(new Body(getMessage()))
+        .media(new Media(foundEmployee.getImageUrl()))
+        .build()
+      )
+      .build()
+      .toXml();
   }
 
   public Employee getFoundEmployee() {

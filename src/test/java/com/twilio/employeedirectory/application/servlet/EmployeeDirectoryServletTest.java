@@ -5,7 +5,7 @@ import com.twilio.employeedirectory.domain.query.EmployeeMatch;
 import com.twilio.employeedirectory.domain.query.MultipleMatch;
 import com.twilio.employeedirectory.domain.query.PerfectMatch;
 import com.twilio.employeedirectory.domain.service.EmployeeDirectoryService;
-import com.twilio.sdk.verbs.TwiMLException;
+import com.twilio.twiml.TwiMLException;
 import org.junit.Test;
 
 import javax.servlet.http.Cookie;
