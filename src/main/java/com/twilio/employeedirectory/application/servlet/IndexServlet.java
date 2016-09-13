@@ -1,13 +1,13 @@
 package com.twilio.employeedirectory.application.servlet;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
 import com.google.inject.persist.Transactional;
 import com.twilio.employeedirectory.domain.common.Twilio;
 import com.twilio.employeedirectory.domain.error.EmployeeLoadException;
 import com.twilio.employeedirectory.domain.model.Employee;
 import com.twilio.employeedirectory.domain.repository.EmployeeRepository;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.type.CollectionType;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
