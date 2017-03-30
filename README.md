@@ -51,29 +51,29 @@ mobile phone user can send a text message with a partial string of the person's 
 
 1. Expose your local web server to the internet using a tool like [ngrok](//ngrok.com/).
 
-You can click [here](https://www.twilio.com/blog/2015/09/6-awesome-reasons-to-use-ngrok-when-testing-webhooks.html) for more details.
-This step is important because the application won't work as expected if you run it using `localhost`.
+   You can click [here](https://www.twilio.com/blog/2015/09/6-awesome-reasons-to-use-ngrok-when-testing-webhooks.html) for more details.
+   This step is important because the application won't work as expected if you run it using `localhost`.
 
    ```bash
    $ ngrok http 8080
    ```
 
-Once ngrok is running, open up your browser and go to your ngrok URL. It will look something like this:
+   Once ngrok is running, open up your browser and go to your ngrok URL. It will look something like this:
 
-  `http://<sub-domain>.ngrok.io/`
+     `http://<sub-domain>.ngrok.io/`
 
 1. Configure Twilio to call your webhooks.
 
-  You will also need to configure Twilio to call your application when SMSs are received
-  on your _Twilio Number_. The **SMS & MMS Request URL** should look something like this:
+   You will also need to configure Twilio to call your application when SMSs are received
+   on your _Twilio Number_. The **SMS & MMS Request URL** should look something like this:
 
-  ```
-  http://<sub-domain>.ngrok.io/directory/search
-  ```
+   ```
+   http://<sub-domain>.ngrok.io/directory/search
+   ```
 
-  The used method is **HTTP POST**.
+   The used method is **HTTP POST**.
 
-  ![Configure SMS](http://howtodocs.s3.amazonaws.com/twilio-number-config-all-med.gif)
+   ![Configure SMS](http://howtodocs.s3.amazonaws.com/twilio-number-config-all-med.gif)
 
 That's it!
 
@@ -112,9 +112,9 @@ Each time the applications loads the `IndexServlet#init` function will create a 
 
 1. If your query matches only one employee, he/she will be returned immediately.
 
- Eg.: "Spider" will return in the web version:
+   Eg.: "Spider" will return in the web version:
 
- ![Query an employee partially](http://howtodocs.s3.amazonaws.com/employee-directory-lookup.png)
+   ![Query an employee partially](http://howtodocs.s3.amazonaws.com/employee-directory-lookup.png)
 
 [twilio-phone-number]: https://www.twilio.com/console/phone-numbers/incoming
 

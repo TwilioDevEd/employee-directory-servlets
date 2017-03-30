@@ -4,6 +4,14 @@ plugins {
     id 'checkstyle'
     id 'org.akhikhl.gretty' version '1.2.4'
 }
+
+gretty {
+    httpPort = 8080
+    contextPath = ''
+    logbackConfigFile = "src/main/resources/logback.xml"
+    jettyXmlFile = "src/main/resources/jetty-logback-access.xml"
+}
+
 checkstyle {
     toolVersion = "6.1.1"
 }
@@ -20,10 +28,12 @@ repositories {
 }
 
 dependencies {
+    def logbackVersion = "1.2.2"
+
     providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
 
     compile 'org.slf4j:slf4j-api:1.7.21'
-    compile 'com.twilio.sdk:twilio:7.0.0-rc-29'
+    compile 'com.twilio.sdk:twilio:7.8.0'
 
     compile 'org.eclipse.persistence:javax.persistence:2.1.1'
     compile 'org.eclipse.persistence:org.eclipse.persistence.jpa:2.6.3'
@@ -35,6 +45,12 @@ dependencies {
 
     compile 'com.fasterxml.jackson.core:jackson-core:2.7.3'
 
+    compile "ch.qos.logback:logback-classic:${logbackVersion}"
+    compile "ch.qos.logback:logback-access:${logbackVersion}"
+
+    gretty "ch.qos.logback:logback-access:${logbackVersion}"
+    gretty "ch.qos.logback:logback-classic:${logbackVersion}"
+
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-all:1.9.5'
 }
@@ -42,6 +58,3 @@ dependencies {
 task wrapper(type: Wrapper) {
     gradleVersion = '2.3'
 }
-
-//Change context path (base url). otherwise defaults to name of project
-gretty.contextPath = ''
