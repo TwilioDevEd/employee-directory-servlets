@@ -7,10 +7,10 @@ import com.twilio.employeedirectory.domain.query.EmployeeMatch;
 import com.twilio.employeedirectory.domain.query.MultipleMatch;
 import com.twilio.employeedirectory.domain.query.NoMatch;
 import com.twilio.employeedirectory.domain.service.EmployeeDirectoryService;
-import com.twilio.twiml.Body;
-import com.twilio.twiml.Message;
 import com.twilio.twiml.MessagingResponse;
 import com.twilio.twiml.TwiMLException;
+import com.twilio.twiml.messaging.Body;
+import com.twilio.twiml.messaging.Message;
 import org.apache.http.NameValuePair;
 
 import javax.inject.Inject;
@@ -88,7 +88,7 @@ public class EmployeeDirectoryServlet extends HttpServlet {
       response.setContentType("text/xml");
       MessagingResponse messagingResponse = new MessagingResponse.Builder()
         .message(new Message.Builder()
-          .body(new Body(message))
+          .body(new Body.Builder(message).build())
           .build()
         ).build();
       response.getWriter().print(messagingResponse.toXml());
