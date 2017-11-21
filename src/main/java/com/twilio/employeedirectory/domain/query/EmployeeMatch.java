@@ -1,9 +1,9 @@
 package com.twilio.employeedirectory.domain.query;
 
-import com.twilio.twiml.Body;
-import com.twilio.twiml.Message;
 import com.twilio.twiml.MessagingResponse;
 import com.twilio.twiml.TwiMLException;
+import com.twilio.twiml.messaging.Body;
+import com.twilio.twiml.messaging.Message;
 
 
 /**
@@ -27,7 +27,7 @@ public interface EmployeeMatch {
   default String getMessageTwiml() throws TwiMLException {
     return new MessagingResponse.Builder()
       .message(new Message.Builder()
-        .body(new Body(getMessage()))
+        .body(new Body.Builder(getMessage()).build())
         .build()
       )
       .build()
