@@ -43,7 +43,7 @@ dependencies {
     compile('com.google.inject.extensions:guice-persist:4.0')
     compile('com.google.inject.extensions:guice-servlet:4.0')
 
-    compile 'com.fasterxml.jackson.core:jackson-core:2.7.3'
+    compile 'com.fasterxml.jackson.core:jackson-core:2.11.2'
 
     compile "ch.qos.logback:logback-classic:${logbackVersion}"
     compile "ch.qos.logback:logback-access:${logbackVersion}"
