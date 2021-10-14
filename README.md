@@ -4,7 +4,7 @@
 
 # Employee Directory with Servlets
 
-[![Build Status](https://travis-ci.org/TwilioDevEd/employee-directory-servlets.svg?branch=master)](https://travis-ci.org/TwilioDevEd/employee-directory-servlets)
+[![Java Servlet CI](https://github.com/TwilioDevEd/employee-directory-servlets/actions/workflows/gradle.yml/badge.svg)](https://github.com/TwilioDevEd/employee-directory-servlets/actions/workflows/gradle.yml)
 
 Use Twilio to accept SMS messages and translate them into queries against a
 [SQLite](//www.sqlite.org/) database. These example functions show how to access an Employee Directory via SMS. A
