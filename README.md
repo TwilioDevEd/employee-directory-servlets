@@ -10,41 +10,52 @@ Use Twilio to accept SMS messages and translate them into queries against a
 [SQLite](//www.sqlite.org/) database. These example functions show how to access an Employee Directory via SMS. A
 mobile phone user can send a text message with a partial string of the person's name and it will return their picture and contact information (Email address and Phone number).
 
+## Setup
+
 ### Prerequisites
 
 1. [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) installed in your operative system.
 1. A Twilio account with a verified [phone number][twilio-phone-number]. (Get a [free account](//www.twilio.com/try-twilio?utm_campaign=tutorials&utm_medium=readme) here.).  If you are using a Twilio Trial Account, you can learn all about it [here](https://www.twilio.com/help/faq/twilio-basics/how-does-twilios-free-trial-work).
+
+### Twilio Account Settings
+
+This application should give you a ready-made starting point for writing your
+own appointment reminder application. Before we begin, we need to collect
+all the config values we need to run the application:
+
+| Config Value | Description                                                                                                                                                  |
+| :---------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Account Sid  | Your primary Twilio account identifier - find this [in the Console](https://www.twilio.com/console).                                                         |
+| Auth Token   | Used to authenticate - [just like the above, you'll find this here](https://www.twilio.com/console).                                                         |
+| Phone number | A Twilio phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164) - you can [get one here](https://www.twilio.com/console/phone-numbers/incoming) |
 
 ### Local Development
 
 1. First clone this repository and `cd` into it.
 
    ```
-   $ git clone git@github.com:TwilioDevEd/employee-directory-servlets.git
-   $ cd employee-directory-servlets
+   git clone git@github.com:TwilioDevEd/employee-directory-servlets.git
+   cd employee-directory-servlets
    ```
 
-1. Edit the sample configuration file `.env.example` and edit it to match your configuration.
+1.  Set your environment variables
 
-   You can use the `.env.example` in a unix based operative system with the `source` command to load the variables into your environment:
+    ```bash
+    cp .env.example .env
+    ```
+   See [Twilio Account Settings](#twilio-account-settings) to locate the necessary environment variables.
 
-   ```bash
-   $ source .env.example
-   ```
-
-   If you are using a different operating system, make sure that all the
-   variables from the `.env.example` file are loaded into your environment.
 
 1. Make sure the tests succeed.
 
    ```bash
-   $ ./gradlew check
+   ./gradlew check
    ```
 
 1. Start the server.
 
    ```bash
-   $ ./gradlew appRun
+   ./gradlew appRun
    ```
 
 ### Expose the Application to the Wider Internet
@@ -55,7 +66,7 @@ mobile phone user can send a text message with a partial string of the person's 
    This step is important because the application won't work as expected if you run it using `localhost`.
 
    ```bash
-   $ ngrok http 8080
+   ngrok http 8080
    ```
 
    Once ngrok is running, open up your browser and go to your ngrok URL. It will look something like this:
