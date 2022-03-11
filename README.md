@@ -15,7 +15,7 @@ mobile phone user can send a text message with a partial string of the person's 
 ### Prerequisites
 
 1. [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) installed in your operative system.
-1. A Twilio account with a verified [phone number][twilio-phone-number]. (Get a [free account](//www.twilio.com/try-twilio?utm_campaign=tutorials&utm_medium=readme) here.).  If you are using a Twilio Trial Account, you can learn all about it [here](https://www.twilio.com/help/faq/twilio-basics/how-does-twilios-free-trial-work).
+1. A Twilio account with a verified [phone number][twilio-phone-number]. (Get a [free account](//www.twilio.com/try-twilio?utm_campaign=tutorials&utm_medium=readme) here.).  If you are using a Twilio Trial Account, you can learn all about it [here](https://www.twilio.com/docs/usage/tutorials/how-to-use-your-free-trial-account).
 
 ### Twilio Account Settings
 
@@ -27,7 +27,7 @@ all the config values we need to run the application:
 | :---------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Account Sid  | Your primary Twilio account identifier - find this [in the Console](https://www.twilio.com/console).                                                         |
 | Auth Token   | Used to authenticate - [just like the above, you'll find this here](https://www.twilio.com/console).                                                         |
-| Phone number | A Twilio phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164) - you can [get one here](https://www.twilio.com/console/phone-numbers/incoming) |
+| Phone number | A Twilio phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164) - you can [get one here](https://console.twilio.com/us1/develop/phone-numbers/manage/search?frameUrl=%2Fconsole%2Fphone-numbers%2Fsearch%3Fx-target-region%3Dus1&currentFrameUrl=%2Fconsole%2Fphone-numbers%2Fsearch%3FisoCountry%3DUS%26searchTerm%3D%26searchFilter%3Dleft%26searchType%3Dnumber%26x-target-region%3Dus1%26__override_layout__%3Dembed%26bifrost%3Dtrue) |
 
 ### Local Development
 
@@ -84,7 +84,7 @@ all the config values we need to run the application:
 
    The used method is **HTTP POST**.
 
-   ![Configure SMS](http://howtodocs.s3.amazonaws.com/twilio-number-config-all-med.gif)
+   [Learn how to configure your Twilio phone number for SMS](https://support.twilio.com/hc/en-us/articles/223136047-Configure-a-Twilio-Phone-Number-to-Receive-and-Respond-to-Messages#h_5fd3801f-8241-421f-ad0f-8fb6c25ba68c)
 
 That's it!
 
@@ -121,13 +121,9 @@ Each time the applications loads the `IndexServlet#init` function will create a 
    [the image goes here]
    ```
 
-1. If your query matches only one employee, he/she will be returned immediately.
+1. If your query matches only one employee, they will be returned immediately.
 
-   Eg.: "Spider" will return in the web version:
-
-   ![Query an employee partially](http://howtodocs.s3.amazonaws.com/employee-directory-lookup.png)
-
-[twilio-phone-number]: https://www.twilio.com/console/phone-numbers/incoming
+[twilio-phone-number]: https://console.twilio.com/us1/develop/phone-numbers/manage/active?frameUrl=%2Fconsole%2Fphone-numbers%2Fincoming%3Fx-target-region%3Dus1
 
 ## Meta
 
